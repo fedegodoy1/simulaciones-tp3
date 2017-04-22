@@ -20,7 +20,6 @@ public class UniformeTable extends javax.swing.JFrame {
     Uniforme uniformeValues;
 
     public UniformeTable(Controller cont, Uniforme uniformeValues) {
-   // public UniformeTable(Controller cont, float[]vec, int desde, int hasta) {
         controller = cont;
         this.uniformeValues = uniformeValues;
         initComponents();
@@ -191,7 +190,8 @@ public class UniformeTable extends javax.swing.JFrame {
 
     private void txt_ejecutar_pruebaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_ejecutar_pruebaActionPerformed
         // TODO add your handling code here:
-  //    new UniformeTestTable();
+     
+    // new UniformeTestTable(controller, uniformeValues);
     }//GEN-LAST:event_txt_ejecutar_pruebaActionPerformed
 
     

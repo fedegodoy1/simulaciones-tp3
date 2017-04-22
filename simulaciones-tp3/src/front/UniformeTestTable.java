@@ -10,6 +10,7 @@ import javax.swing.*;
 import javax.swing.table.*;
 import jfree.*;
 import objects.Controller;
+import objects.Uniforme;
 
 /**
  *
@@ -22,173 +23,158 @@ public class UniformeTestTable extends javax.swing.JFrame {
     float[] valoresGenerados;
     int cantIntervalos;
     
-    public UniformeTestTable(Controller cont, int[][] response, float[]vec, float rango, int cantIntervalos) {
-        
-        controller = cont;
-        contador = response.length;
-        initComponents();
-        
-        DecimalFormat in = new DecimalFormat("0.00");
-        DecimalFormat aleat = new DecimalFormat("0.0000");
-        DecimalFormat c = new DecimalFormat("0.000");
-        int contador = 0;
-        int frecEsp = (int) vec.length/cantIntervalos;
-        double rangoM;
-        DefaultTableModel tm = (DefaultTableModel) table.getModel();
-        
-//        if(frecEsp < 5)
-//        {
-//            int frecA = frecEsp;
-//            int loops = 0;
-//            int frecB = frecA;
-//            
-//            do{
-//                frecB =+ frecA;
-//                loops ++;
-//            }while(frecB >= 5);
-//            
-//            frecEsp = frecB;
-//            
+    //public UniformeTestTable(Controller cont, int[][] response, float[]vec, float rango, int cantIntervalos) {
+    public UniformeTestTable(Controller cont, Uniforme uniformeValues, int intevalos) {
+        float rango = calcularRango(uniformeValues.getDesde(),uniformeValues.getHasta(), intevalos);
+//        controller = cont;
+//        contador = response.length;
+//        initComponents();
+//        
+//        DecimalFormat in = new DecimalFormat("0.00");
+//        DecimalFormat aleat = new DecimalFormat("0.0000");
+//        DecimalFormat c = new DecimalFormat("0.000");
+//        int contador = 0;
+//        int frecEsp = (int) vec.length/cantIntervalos;
+//        double rangoM;
+//        DefaultTableModel tm = (DefaultTableModel) table.getModel();
+//        
+//        for (int i = 0; i < response.length; i++) {
+//            if (i == 0) {
+//                rangoM = rango;
+//                tm.addRow(new Object[]{"0.00 - "+in.format(rangoM),i, response[i][1], frecEsp, c.format(estadisticoPrueba(response,frecEsp,i))});
+//                contador++;
+//            }
+//            else{
+//                if (contador == 1) {
+//                    tm.addRow(new Object[]{in.format(rango)+" - "+in.format(rango+rango),i, response[i][1], frecEsp, c.format(estadisticoPrueba(response,frecEsp,i))});
+//                    contador ++;
+//                }
+//                else{
+//                   tm.addRow(new Object[]{in.format(rango*contador)+" - "+in.format((rango*contador)+rango),i, response[i][1], frecEsp, c.format(estadisticoPrueba(response,frecEsp,i))});
+//                   contador++; 
+//                }
+//                
+//            }
 //        }
-        
-        
-        for (int i = 0; i < response.length; i++) {
-            if (i == 0) {
-                rangoM = rango;
-                tm.addRow(new Object[]{"0.00 - "+in.format(rangoM),i, response[i][1], frecEsp, c.format(estadisticoPrueba(response,frecEsp,i))});
-                contador++;
-            }
-            else{
-                if (contador == 1) {
-                    tm.addRow(new Object[]{in.format(rango)+" - "+in.format(rango+rango),i, response[i][1], frecEsp, c.format(estadisticoPrueba(response,frecEsp,i))});
-                    contador ++;
-                }
-                else{
-                   tm.addRow(new Object[]{in.format(rango*contador)+" - "+in.format((rango*contador)+rango),i, response[i][1], frecEsp, c.format(estadisticoPrueba(response,frecEsp,i))});
-                   contador++; 
-                }
-                
-            }
-        }
         int frecSumaObservadas = 0, contAux = 0;
         int frecSumaEsp = 0;
         int vueltas = 1, ultimoValor = 0;
         boolean end = false;
-        rangoM = 0;
-        Double [][] r = new Double[tm.getRowCount()][3];
-        double estadisticoTotal = 0;
-        DefaultTableModel tm2 = (DefaultTableModel) tablaFE.getModel();
-        if(frecEsp < 5){
-            
-            for (int i = 0; i <= tm.getRowCount(); i++) {
-                if(frecSumaEsp < 5){   
-                    if(i==tm.getRowCount())//significa que termino de buscar en las filas y aun la fe es menor a 5
-                    {
-                        int valorE = (int)tm2.getValueAt((tm2.getRowCount()-1), 2);
-                        int valorO = (int)tm2.getValueAt((tm2.getRowCount()-1), 1);
-                        
-                        valorE += frecSumaEsp;
-                        valorO += frecSumaObservadas;
-                        
-                        tm2.setValueAt(valorE, (tm2.getRowCount()-1), 2);
-                        tm2.setValueAt(valorO, (tm2.getRowCount()-1), 1);
-                        
-                        double desde = 0;
-                        desde = r[tm2.getRowCount()-1][0];
-                        tm2.setValueAt(in.format(desde)+" - 1,00", (tm2.getRowCount()-1), 0);
-                        
-                        double estadis= (double) Math.pow((valorE - valorO),2)/valorE;
-                        tm2.setValueAt(estadis, (tm2.getRowCount()-1), 3);
-                        
-                        break;
-                    }
-                    frecSumaEsp += (int)tm.getValueAt(i, 3);
-                    frecSumaObservadas += (int) tm.getValueAt(i, 2);
-                    vueltas++;
-                }
-                else{
-                    rangoM = 0;
-                    for (int j = 0; j < vueltas-1; j++) {
-                        rangoM += rango;
-                    }
-                    
-                    do{
-                        if(contAux == 0){
-                            
-                            contAux++;
-                            ultimoValor = vueltas;
-                            
-                            r[0][0] = 0.0;
-                            r[0][1] = rangoM;
-                            double estadisticoParcial=(double)(Math.pow((frecSumaObservadas-frecSumaEsp),2))/frecSumaEsp;
-                            tm2.addRow(new Object[]{"0.00 - "+ in.format(rangoM), frecSumaObservadas, frecSumaEsp, c.format(estadisticoParcial)});
-                            estadisticoTotal += estadisticoParcial;
-                            frecSumaEsp = 0;
-                            frecSumaObservadas = 0;
-                            i = i-1;
-                            end = true;
-                        }
-                        else if(contAux != 0){
-                            double rangoM2 = r[contAux-1][1];
-                            double estadisticoParcial=(double)(Math.pow((frecSumaObservadas-frecSumaEsp),2))/frecSumaEsp;
-                            estadisticoTotal += estadisticoParcial;
-                            tm2.addRow(new Object[]{in.format(rangoM2)+" - "+ in.format(rangoM), frecSumaObservadas, frecSumaEsp, c.format(estadisticoParcial)});
-                            
-                            r[contAux][0]=rangoM2;
-                            r[contAux][1]=rangoM;
-                            
-                            ultimoValor = vueltas-1;
-                            frecSumaEsp = 0;
-                            frecSumaObservadas = 0;
-                            contAux++;
-                            if(i==tm.getRowCount()){
-                                end = true;
-                            }
-                            else{
-                                i = i-1;
-                                end = true;
-                            }
-                        }
-                    }while(end != true);
-                }
-            }
-        }
-        
-        //para mostrar los valores generados
-        String acum = "";
-        for (int i = 0; i < vec.length; i++) {
-            acum += "Valor "+(i+1)+": "+aleat.format(vec[i])+".\n";
-        }
-        txt_valoresGenerados.setText(acum);
-        
-        _gradosLib_agrupado.setText(""+gradosLibertad(tm2.getRowCount()));
-        txt_nuevo_estadistico.setText(""+c.format(estadisticoTotal));
-        
-        //para el calculo de mi estadistico de prueba total
-        txt_estadistico.setText(""+c.format(estadisticoPruebaTotal(response,frecEsp)));
-        txt_grados.setText(""+gradosLibertad(cantIntervalos));
-        
-        valoresGenerados = vec;
-        this.cantIntervalos = cantIntervalos;
-      //  agregarHistograma();
-    }
-    
-    public double estadisticoPrueba(int[][] response, int frecEsp, int loop){
-        double res = 0;//(Math.pow((response[i][1]-frecEsp),2))/frecEsp;
-        res = (double)(Math.pow(response[loop][1] - frecEsp,2))/frecEsp;
-        return res;
-    }
-    public int gradosLibertad(int intervalo){
-        return intervalo - 0 -1;
-    }
-    
-    public double estadisticoPruebaTotal(int[][] response, int frecEsp){
-        double res = 0, a = 0;//(Math.pow((response[i][1]-frecEsp),2))/frecEsp;
-        for (int i = 0; i < response.length; i++) {
-            a += (double)(Math.pow(response[i][1] - frecEsp,2))/frecEsp;
-        }
-        res = a;
-        return res;
+//        rangoM = 0;
+//        Double [][] r = new Double[tm.getRowCount()][3];
+//        double estadisticoTotal = 0;
+//        DefaultTableModel tm2 = (DefaultTableModel) tablaFE.getModel();
+//        if(frecEsp < 5){
+//            
+//            for (int i = 0; i <= tm.getRowCount(); i++) {
+//                if(frecSumaEsp < 5){   
+//                    if(i==tm.getRowCount())//significa que termino de buscar en las filas y aun la fe es menor a 5
+//                    {
+//                        int valorE = (int)tm2.getValueAt((tm2.getRowCount()-1), 2);
+//                        int valorO = (int)tm2.getValueAt((tm2.getRowCount()-1), 1);
+//                        
+//                        valorE += frecSumaEsp;
+//                        valorO += frecSumaObservadas;
+//                        
+//                        tm2.setValueAt(valorE, (tm2.getRowCount()-1), 2);
+//                        tm2.setValueAt(valorO, (tm2.getRowCount()-1), 1);
+//                        
+//                        double desde = 0;
+//                        desde = r[tm2.getRowCount()-1][0];
+//                        tm2.setValueAt(in.format(desde)+" - 1,00", (tm2.getRowCount()-1), 0);
+//                        
+//                        double estadis= (double) Math.pow((valorE - valorO),2)/valorE;
+//                        tm2.setValueAt(estadis, (tm2.getRowCount()-1), 3);
+//                        
+//                        break;
+//                    }
+//                    frecSumaEsp += (int)tm.getValueAt(i, 3);
+//                    frecSumaObservadas += (int) tm.getValueAt(i, 2);
+//                    vueltas++;
+//                }
+//                else{
+//                    rangoM = 0;
+//                    for (int j = 0; j < vueltas-1; j++) {
+//                        rangoM += rango;
+//                    }
+//                    
+//                    do{
+//                        if(contAux == 0){
+//                            
+//                            contAux++;
+//                            ultimoValor = vueltas;
+//                            
+//                            r[0][0] = 0.0;
+//                            r[0][1] = rangoM;
+//                            double estadisticoParcial=(double)(Math.pow((frecSumaObservadas-frecSumaEsp),2))/frecSumaEsp;
+//                            tm2.addRow(new Object[]{"0.00 - "+ in.format(rangoM), frecSumaObservadas, frecSumaEsp, c.format(estadisticoParcial)});
+//                            estadisticoTotal += estadisticoParcial;
+//                            frecSumaEsp = 0;
+//                            frecSumaObservadas = 0;
+//                            i = i-1;
+//                            end = true;
+//                        }
+//                        else if(contAux != 0){
+//                            double rangoM2 = r[contAux-1][1];
+//                            double estadisticoParcial=(double)(Math.pow((frecSumaObservadas-frecSumaEsp),2))/frecSumaEsp;
+//                            estadisticoTotal += estadisticoParcial;
+//                            tm2.addRow(new Object[]{in.format(rangoM2)+" - "+ in.format(rangoM), frecSumaObservadas, frecSumaEsp, c.format(estadisticoParcial)});
+//                            
+//                            r[contAux][0]=rangoM2;
+//                            r[contAux][1]=rangoM;
+//                            
+//                            ultimoValor = vueltas-1;
+//                            frecSumaEsp = 0;
+//                            frecSumaObservadas = 0;
+//                            contAux++;
+//                            if(i==tm.getRowCount()){
+//                                end = true;
+//                            }
+//                            else{
+//                                i = i-1;
+//                                end = true;
+//                            }
+//                        }
+//                    }while(end != true);
+//                }
+//            }
+//        }
+//        
+//        //para mostrar los valores generados
+//        String acum = "";
+//        for (int i = 0; i < vec.length; i++) {
+//            acum += "Valor "+(i+1)+": "+aleat.format(vec[i])+".\n";
+//        }
+//        txt_valoresGenerados.setText(acum);
+//        
+//        _gradosLib_agrupado.setText(""+gradosLibertad(tm2.getRowCount()));
+//        txt_nuevo_estadistico.setText(""+c.format(estadisticoTotal));
+//        
+//        //para el calculo de mi estadistico de prueba total
+//        txt_estadistico.setText(""+c.format(estadisticoPruebaTotal(response,frecEsp)));
+//        txt_grados.setText(""+gradosLibertad(cantIntervalos));
+//        
+//        valoresGenerados = vec;
+//        this.cantIntervalos = cantIntervalos;
+//      //  agregarHistograma();
+//    }
+//    
+//    public double estadisticoPrueba(int[][] response, int frecEsp, int loop){
+//        double res = 0;//(Math.pow((response[i][1]-frecEsp),2))/frecEsp;
+//        res = (double)(Math.pow(response[loop][1] - frecEsp,2))/frecEsp;
+//        return res;
+//    }
+//    public int gradosLibertad(int intervalo){
+//        return intervalo - 0 -1;
+//    }
+//    
+//    public double estadisticoPruebaTotal(int[][] response, int frecEsp){
+//        double res = 0, a = 0;//(Math.pow((response[i][1]-frecEsp),2))/frecEsp;
+//        for (int i = 0; i < response.length; i++) {
+//            a += (double)(Math.pow(response[i][1] - frecEsp,2))/frecEsp;
+//        }
+//        res = a;
+//        return res;
     }
     
     /**
@@ -451,5 +437,9 @@ public class UniformeTestTable extends javax.swing.JFrame {
             ret[i] = (double) valoresGenerados[i];
         }
         return ret;
+    }
+    
+    private float calcularRango(int desde, int hasta, int cantIntervalos){
+        return (hasta-desde)/cantIntervalos;
     }
 }
