@@ -7,6 +7,7 @@ package objects;
 
 import java.util.Random;
 import front.*;
+import objects.Uniforme;
 /**
  *
  * @author federico
@@ -65,7 +66,7 @@ public class Controller {
         return tipoG;
     }
     
-     public void randomFloatUniforme(int size, int desde, int hasta){
+     public void randomFloatUniforme(int desde, int hasta, int size){
         Random random = new Random();
         float[] vecValores = new float[size];
         float randomValue=0, operacion = 0;
@@ -76,7 +77,8 @@ public class Controller {
             operacion = desde + (randomValue*(hasta - desde));
             vecValores[i]=operacion;
         }
-        UniformeTable table = new UniformeTable(this,vecValores,desde,hasta);
+        Uniforme uniformeValues = new Uniforme(vecValores, desde, hasta);
+        UniformeTable table = new UniformeTable(this, uniformeValues);
         table.setVisible(true);
     }
     

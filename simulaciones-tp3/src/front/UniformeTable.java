@@ -8,6 +8,7 @@ package front;
 import java.text.DecimalFormat;
 import javax.swing.table.DefaultTableModel;
 import objects.Controller;
+import objects.Uniforme;
 
 /**
  *
@@ -16,11 +17,15 @@ import objects.Controller;
 public class UniformeTable extends javax.swing.JFrame {
 
     Controller controller;
-    
-    public UniformeTable(Controller cont, float[]vec, int desde, int hasta) {
+    Uniforme uniformeValues;
+
+    public UniformeTable(Controller cont, Uniforme uniformeValues) {
+   // public UniformeTable(Controller cont, float[]vec, int desde, int hasta) {
         controller = cont;
+        this.uniformeValues = uniformeValues;
         initComponents();
         
+        float [] vec = uniformeValues.getVecValores();
         DecimalFormat in = new DecimalFormat("0.00");
         DecimalFormat aleat = new DecimalFormat("0.0000");
         DecimalFormat c = new DecimalFormat("0.000");
@@ -31,8 +36,8 @@ public class UniformeTable extends javax.swing.JFrame {
             tm.addRow(new Object[]{i+1 , c.format(vec[i])});
         }
         
-        txt_desde.setText(""+desde);
-        txt_hasta.setText(""+hasta);
+        txt_desde.setText(""+uniformeValues.getDesde());
+        txt_hasta.setText(""+uniformeValues.getHasta());
         setLocationRelativeTo(null);
         setTitle("Distribucion Uniforme");
     }
@@ -100,8 +105,18 @@ public class UniformeTable extends javax.swing.JFrame {
         jLabel5.setText("Intervalo");
 
         txt_ejecutar_prueba.setText("Ejecutar prueba");
+        txt_ejecutar_prueba.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txt_ejecutar_pruebaActionPerformed(evt);
+            }
+        });
 
         jButton3.setText("Volver");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -167,6 +182,17 @@ public class UniformeTable extends javax.swing.JFrame {
     private void cmb_intervaloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmb_intervaloActionPerformed
         
     }//GEN-LAST:event_cmb_intervaloActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+        this.setVisible(false);
+        controller.showMenu();
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void txt_ejecutar_pruebaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_ejecutar_pruebaActionPerformed
+        // TODO add your handling code here:
+  //    new UniformeTestTable();
+    }//GEN-LAST:event_txt_ejecutar_pruebaActionPerformed
 
     
     

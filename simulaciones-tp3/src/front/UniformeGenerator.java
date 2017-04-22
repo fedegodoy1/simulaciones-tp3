@@ -126,10 +126,12 @@ public class UniformeGenerator extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btn_comenzarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_comenzarActionPerformed
+        this.setVisible(false);
         controller.randomFloatUniforme(
-                Integer.parseInt(txt_cant_num.getText()), 
                 Integer.parseInt(txt_desde.getText()), 
-                Integer.parseInt(txt_hasta.getText()));
+                Integer.parseInt(txt_hasta.getText()),                
+                Integer.parseInt(txt_cant_num.getText()) 
+);
     }//GEN-LAST:event_btn_comenzarActionPerformed
 
     private void btn_backActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_backActionPerformed
