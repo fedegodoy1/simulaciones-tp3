@@ -79,16 +79,25 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Normal"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_normalActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="btn_exponencial">
       <Properties>
         <Property name="text" type="java.lang.String" value="Exponencial"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_exponencialActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="btn_poisson">
       <Properties>
         <Property name="text" type="java.lang.String" value="Poisson"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_poissonActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

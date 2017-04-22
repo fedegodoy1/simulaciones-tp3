@@ -48,10 +48,25 @@ public class Main extends javax.swing.JFrame {
         });
 
         btn_normal.setText("Normal");
+        btn_normal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_normalActionPerformed(evt);
+            }
+        });
 
         btn_exponencial.setText("Exponencial");
+        btn_exponencial.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_exponencialActionPerformed(evt);
+            }
+        });
 
         btn_poisson.setText("Poisson");
+        btn_poisson.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_poissonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -92,6 +107,18 @@ public class Main extends javax.swing.JFrame {
     private void btn_uniformeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_uniformeActionPerformed
         controller.selectedUniforme();
     }//GEN-LAST:event_btn_uniformeActionPerformed
+
+    private void btn_normalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_normalActionPerformed
+        controller.selectedGenerator("normal");
+    }//GEN-LAST:event_btn_normalActionPerformed
+
+    private void btn_exponencialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_exponencialActionPerformed
+        controller.selectedGenerator("exponencial");
+    }//GEN-LAST:event_btn_exponencialActionPerformed
+
+    private void btn_poissonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_poissonActionPerformed
+        controller.selectedGenerator("poisson");
+    }//GEN-LAST:event_btn_poissonActionPerformed
 
     /**
      * @param args the command line arguments

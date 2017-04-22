@@ -18,10 +18,12 @@ public class Controller {
     static Exponencial expo;
     static Poisson poisson;
     static UniformeGenerator uniforme;
+    static Generator generator;
     
     protected Controller(Main menu) {
         main = menu;
         uniforme = new UniformeGenerator(this);
+        generator = new Generator(this);
     }
     
     public static Controller getInstance(Main menu) {
@@ -51,6 +53,11 @@ public class Controller {
         this.uniforme.setVisible(true);
     }
     
+    public void selectedGenerator(String metodo) {
+        main.setVisible(false);
+        this.generator.setVisible(true);
+        this.generator.setGeneratorType(metodo);
+    }
     
      public void randomFloatUniforme(int size, int desde, int hasta){
         Random random = new Random();
@@ -73,8 +80,10 @@ public class Controller {
         String[] datosUsados = new String[2];
         datosUsados[0] = ""+size;
         datosUsados[1] = ""+media;
-        
+        //datosUsados[2] = ""+desviacion
         GeneratorTable exp = new GeneratorTable(this,vec,"Exponencial",datosUsados);
+        exp.setVisible(true);
+        generator.setVisible(false);
     }
     
 }

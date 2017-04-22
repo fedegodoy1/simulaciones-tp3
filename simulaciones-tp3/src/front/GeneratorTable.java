@@ -1,5 +1,7 @@
 package front;
 
+import java.text.DecimalFormat;
+import javax.swing.table.DefaultTableModel;
 import objects.Controller;
 
 /**
@@ -15,6 +17,18 @@ public class GeneratorTable extends javax.swing.JFrame {
         initComponents();
         
         setTitle("Distribución "+distribucion);
+        
+        DecimalFormat in = new DecimalFormat("0.00");
+        DecimalFormat aleat = new DecimalFormat("0.0000");
+        DecimalFormat c = new DecimalFormat("0.000");
+        
+        DefaultTableModel tm = (DefaultTableModel) tabla_valoresA.getModel();
+        for (int i = 0; i < vec.length; i++) {
+            tm.addRow(new Object[]{i+1 , c.format(vec[i])});
+        }
+        txt_media.setText(""+datos[1]);
+        txt_cantNum.setText(""+datos[0]);
+        
     }
 
     /**
