@@ -17,11 +17,11 @@ public class Controller {
     static Normal normal;
     static Exponencial expo;
     static Poisson poisson;
-    static GeneradorUniforme uniforme;
+    static UniformeGenerator uniforme;
     
     protected Controller(Main menu) {
         main = menu;
-        uniforme = new GeneradorUniforme(this);
+        uniforme = new UniformeGenerator(this);
     }
     
     public static Controller getInstance(Main menu) {
@@ -52,7 +52,7 @@ public class Controller {
     }
     
     
-    public void randomFloatUniforme(int size, int desde, int hasta){
+     public void randomFloatUniforme(int size, int desde, int hasta){
         Random random = new Random();
         float[] vecValores = new float[size];
         float randomValue=0, operacion = 0;
@@ -63,10 +63,18 @@ public class Controller {
             operacion = desde + (randomValue*(hasta - desde));
             vecValores[i]=operacion;
         }
-        TablaUniforme table = new TablaUniforme(this,vecValores,desde,hasta);
+        UniformeTable table = new UniformeTable(this,vecValores,desde,hasta);
         table.setVisible(true);
     }
     
-    
+    public void randomFloatExponencial(int size, float media){
+        Exponencial e = new Exponencial(media);
+        float[] vec = Calculator.calculatorExp(size, e);
+        String[] datosUsados = new String[2];
+        datosUsados[0] = ""+size;
+        datosUsados[1] = ""+media;
+        
+        GeneratorTable exp = new GeneratorTable(this,vec,"Exponencial",datosUsados);
+    }
     
 }

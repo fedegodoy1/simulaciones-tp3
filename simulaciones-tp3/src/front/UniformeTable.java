@@ -13,11 +13,11 @@ import objects.Controller;
  *
  * @author federico
  */
-public class TablaUniforme extends javax.swing.JFrame {
+public class UniformeTable extends javax.swing.JFrame {
 
     Controller controller;
     
-    public TablaUniforme(Controller cont, float[]vec, int desde, int hasta) {
+    public UniformeTable(Controller cont, float[]vec, int desde, int hasta) {
         controller = cont;
         initComponents();
         
@@ -34,6 +34,7 @@ public class TablaUniforme extends javax.swing.JFrame {
         txt_desde.setText(""+desde);
         txt_hasta.setText(""+hasta);
         setLocationRelativeTo(null);
+        setTitle("Distribucion Uniforme");
     }
 
     
