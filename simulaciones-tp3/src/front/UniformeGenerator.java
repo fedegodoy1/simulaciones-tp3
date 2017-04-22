@@ -133,7 +133,8 @@ public class UniformeGenerator extends javax.swing.JFrame {
     }//GEN-LAST:event_btn_comenzarActionPerformed
 
     private void btn_backActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_backActionPerformed
-        
+        this.setVisible(false);
+        controller.showMenu();
     }//GEN-LAST:event_btn_backActionPerformed
 
     

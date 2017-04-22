@@ -68,6 +68,11 @@ public class Generator extends javax.swing.JFrame {
         });
 
         btn_volver.setText("Volver");
+        btn_volver.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_volverActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -145,6 +150,12 @@ public class Generator extends javax.swing.JFrame {
         }
         
     }//GEN-LAST:event_btn_generarActionPerformed
+
+    private void btn_volverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_volverActionPerformed
+        // TODO add your handling code here:
+        this.setVisible(false);
+        controller.showMenu();
+    }//GEN-LAST:event_btn_volverActionPerformed
 
     
 

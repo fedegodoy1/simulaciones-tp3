@@ -37,7 +37,7 @@
                   <Component id="btn_exponencial" alignment="0" max="32767" attributes="0"/>
                   <Component id="btn_normal" alignment="0" max="32767" attributes="0"/>
                   <Component id="btn_uniforme" alignment="0" max="32767" attributes="0"/>
-                  <Component id="btn_poisson" alignment="0" min="-2" pref="89" max="-2" attributes="0"/>
+                  <Component id="btn_poisson" alignment="0" max="32767" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="90" max="-2" attributes="0"/>
           </Group>
