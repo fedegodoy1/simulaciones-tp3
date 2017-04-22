@@ -13,6 +13,7 @@ import front.*;
  */
 public class Controller {
     private static Controller controller;
+    private String tipoG;
     static Main main;
     static Normal normal;
     static Exponencial expo;
@@ -24,6 +25,7 @@ public class Controller {
         main = menu;
         uniforme = new UniformeGenerator(this);
         generator = new Generator(this);
+        tipoG = "";
     }
     
     public static Controller getInstance(Main menu) {
@@ -53,10 +55,14 @@ public class Controller {
         this.uniforme.setVisible(true);
     }
     
-    public void selectedGenerator(String metodo) {
+    public void selectedGenerator(String tipo) {
+        tipoG = tipo;
         main.setVisible(false);
         this.generator.setVisible(true);
-        this.generator.setGeneratorType(metodo);
+        this.generator.setGeneratorType(tipo);
+    }
+    public String getTipo(){
+        return tipoG;
     }
     
      public void randomFloatUniforme(int size, int desde, int hasta){
@@ -77,7 +83,7 @@ public class Controller {
     public void randomFloatExponencial(int size, float media){
         Exponencial e = new Exponencial(media);
         float[] vec = Calculator.calculatorExp(size, e);
-        String[] datosUsados = new String[2];
+        String[] datosUsados = new String[3];
         datosUsados[0] = ""+size;
         datosUsados[1] = ""+media;
         //datosUsados[2] = ""+desviacion
@@ -86,4 +92,18 @@ public class Controller {
         generator.setVisible(false);
     }
     
+    public void randomFloatNormal(int size, float media, float desviacion)
+    {
+        Normal n = new Normal(media,desviacion);
+        
+        float[] vec = Calculator.calculatorNormal(size,n);
+        String[] datosUsados = new String[3];
+        datosUsados[0] = ""+size;
+        datosUsados[1] = ""+media;
+        datosUsados[2] = ""+desviacion;
+        
+        GeneratorTable exp = new GeneratorTable(this,vec,"Normal",datosUsados);
+        exp.setVisible(true);
+        generator.setVisible(false);
+    }
 }

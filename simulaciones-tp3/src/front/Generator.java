@@ -130,8 +130,20 @@ public class Generator extends javax.swing.JFrame {
     }//GEN-LAST:event_txt_cantNActionPerformed
 
     private void btn_generarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_generarActionPerformed
-        controller.randomFloatExponencial(Integer.parseInt(txt_cantN.getText()),
-                Float.parseFloat(txt_media.getText()));
+        if(controller.getTipo()=="exponencial"){
+            controller.randomFloatExponencial(
+                    Integer.parseInt(txt_cantN.getText()),
+                    Float.parseFloat(txt_media.getText())
+            );
+        }
+        else{
+            if(controller.getTipo()=="normal"){
+                controller.randomFloatNormal(Integer.parseInt(txt_cantN.getText()),
+                        Float.parseFloat(txt_media.getText()),
+                        Float.parseFloat(txt_desviacion.getText()));
+            }
+        }
+        
     }//GEN-LAST:event_btn_generarActionPerformed
 
     

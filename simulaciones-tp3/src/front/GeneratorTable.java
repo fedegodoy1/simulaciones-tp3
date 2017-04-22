@@ -24,11 +24,14 @@ public class GeneratorTable extends javax.swing.JFrame {
         
         DefaultTableModel tm = (DefaultTableModel) tabla_valoresA.getModel();
         for (int i = 0; i < vec.length; i++) {
-            tm.addRow(new Object[]{i+1 , c.format(vec[i])});
+            tm.addRow(new Object[]{i+1 , aleat.format(vec[i])});
         }
         txt_media.setText(""+datos[1]);
         txt_cantNum.setText(""+datos[0]);
-        
+        if(controller.getTipo()=="normal"){
+            txt_desviacion.setText(""+datos[2]);
+        }
+        setLocationRelativeTo(null);
     }
 
     /**
