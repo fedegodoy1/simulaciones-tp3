@@ -40,4 +40,23 @@ public class Calculator {
         return vec;
     }
     
+     public float[][] matrizFrecuenciaUniforme(Uniforme uniforme, float rango, int intervalos){
+        float [][] m = new float [intervalos][2];
+        float comparador;
+        float [] randomVec = uniforme.getVecValores();
+        
+        for (int i = 0; i < randomVec.length; i++) {
+            comparador = rango;
+            for (int j = 0; j < intervalos; j++) {
+                if (randomVec[i]<comparador) {
+                    m[j][1]++;
+                    break;
+                }
+                else{
+                    comparador = comparador + rango;
+                }
+            }
+        }        
+        return m;
+    }
 }

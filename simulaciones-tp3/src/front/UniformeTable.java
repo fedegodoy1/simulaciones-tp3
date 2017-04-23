@@ -190,8 +190,7 @@ public class UniformeTable extends javax.swing.JFrame {
 
     private void txt_ejecutar_pruebaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_ejecutar_pruebaActionPerformed
         // TODO add your handling code here:
-     
-    // new UniformeTestTable(controller, uniformeValues);
+     new UniformeTestTable(controller, uniformeValues, Integer.parseInt((String) cmb_intervalo.getSelectedItem()));
     }//GEN-LAST:event_txt_ejecutar_pruebaActionPerformed
 
     

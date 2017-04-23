@@ -11,6 +11,7 @@ import javax.swing.table.*;
 import jfree.*;
 import objects.Controller;
 import objects.Uniforme;
+import objects.Calculator;
 
 /**
  *
@@ -22,19 +23,21 @@ public class UniformeTestTable extends javax.swing.JFrame {
     int contador;
     float[] valoresGenerados;
     int cantIntervalos;
-    
+    Calculator calculator = new Calculator();
+
     //public UniformeTestTable(Controller cont, int[][] response, float[]vec, float rango, int cantIntervalos) {
-    public UniformeTestTable(Controller cont, Uniforme uniformeValues, int intevalos) {
-        float rango = calcularRango(uniformeValues.getDesde(),uniformeValues.getHasta(), intevalos);
-//        controller = cont;
+    public UniformeTestTable(Controller cont, Uniforme uniformeValues, int intervalos) {
+        float rango = calcularRango(uniformeValues.getDesde(),uniformeValues.getHasta(), intervalos);
+        controller = cont;
+        float [][] matriz = calculator.matrizFrecuenciaUniforme(uniformeValues, rango, intervalos);
 //        contador = response.length;
-//        initComponents();
+        initComponents();
 //        
-//        DecimalFormat in = new DecimalFormat("0.00");
-//        DecimalFormat aleat = new DecimalFormat("0.0000");
-//        DecimalFormat c = new DecimalFormat("0.000");
-//        int contador = 0;
-//        int frecEsp = (int) vec.length/cantIntervalos;
+        DecimalFormat in = new DecimalFormat("0.00");
+        DecimalFormat aleat = new DecimalFormat("0.0000");
+        DecimalFormat c = new DecimalFormat("0.000");
+        int contador = 0;
+        int frecEsp = (int) uniformeValues.getVecValores().length/intervalos;
 //        double rangoM;
 //        DefaultTableModel tm = (DefaultTableModel) table.getModel();
 //        
