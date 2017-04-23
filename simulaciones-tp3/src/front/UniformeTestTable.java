@@ -30,22 +30,21 @@ public class UniformeTestTable extends javax.swing.JFrame {
         float rango = calcularRango(uniformeValues.getDesde(),uniformeValues.getHasta(), intervalos);
         controller = cont;
         float [][][] matriz = calculator.matrizFrecuenciaUniforme(uniformeValues, rango, intervalos);
-//        contador = response.length;
+        
         initComponents();
-//        
         DecimalFormat in = new DecimalFormat("0.00");
         DecimalFormat aleat = new DecimalFormat("0.0000");
         DecimalFormat c = new DecimalFormat("0.000");
         int contador = 0;
         int frecEsp = (int) uniformeValues.getVecValores().length/intervalos;
-        double rangoM;
+        
+        //double rangoM;
         DefaultTableModel tm = (DefaultTableModel) table.getModel();
         
-       // for (int i = 0; i < response.length; i++) {
+        for (int i = 0; i < matriz.length; i++) {
 //            if (i == 0) {
-//                rangoM = rango;
-//                tm.addRow(new Object[]{"0.00 - "+in.format(rangoM),i, response[i][1], frecEsp, c.format(estadisticoPrueba(response,frecEsp,i))});
-//                contador++;
+        //tm.addRow(new Object[]{( in.format(matriz[i][i][0])+' - '+ in.format(matriz[i][i][1])), i, matriz[i][i][2], frecEsp, c.format(estadisticoPrueba(matriz[i][i][2],frecEsp,i))});
+              //  contador++;
 //            }
 //            else{
 //                if (contador == 1) {
@@ -58,7 +57,7 @@ public class UniformeTestTable extends javax.swing.JFrame {
 //                }
 //                
 //            }
-    //    }
+        }
         int frecSumaObservadas = 0, contAux = 0;
         int frecSumaEsp = 0;
         int vueltas = 1, ultimoValor = 0;
@@ -160,13 +159,13 @@ public class UniformeTestTable extends javax.swing.JFrame {
 //        valoresGenerados = vec;
 //        this.cantIntervalos = cantIntervalos;
 //      //  agregarHistograma();
-//    }
+    }
 //    
-//    public double estadisticoPrueba(int[][] response, int frecEsp, int loop){
-//        double res = 0;//(Math.pow((response[i][1]-frecEsp),2))/frecEsp;
-//        res = (double)(Math.pow(response[loop][1] - frecEsp,2))/frecEsp;
-//        return res;
-//    }
+    public double estadisticoPrueba(float frecObs, int frecEsp, int loop){
+        double res = 0;//(Math.pow((response[i][1]-frecEsp),2))/frecEsp;
+        res = (double)(Math.pow(frecObs - frecEsp,2))/frecEsp;
+        return res;
+    }
 //    public int gradosLibertad(int intervalo){
 //        return intervalo - 0 -1;
 //    }
@@ -178,7 +177,7 @@ public class UniformeTestTable extends javax.swing.JFrame {
 //        }
 //        res = a;
 //        return res;
-    }
+   // }
     
     /**
      * This method is called from within the constructor to initialize the form.
