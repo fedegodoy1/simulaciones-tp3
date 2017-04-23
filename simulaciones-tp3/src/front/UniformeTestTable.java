@@ -29,7 +29,7 @@ public class UniformeTestTable extends javax.swing.JFrame {
     public UniformeTestTable(Controller cont, Uniforme uniformeValues, int intervalos) {
         float rango = calcularRango(uniformeValues.getDesde(),uniformeValues.getHasta(), intervalos);
         controller = cont;
-        float [][] matriz = calculator.matrizFrecuenciaUniforme(uniformeValues, rango, intervalos);
+        float [][][] matriz = calculator.matrizFrecuenciaUniforme(uniformeValues, rango, intervalos);
 //        contador = response.length;
         initComponents();
 //        
@@ -38,10 +38,10 @@ public class UniformeTestTable extends javax.swing.JFrame {
         DecimalFormat c = new DecimalFormat("0.000");
         int contador = 0;
         int frecEsp = (int) uniformeValues.getVecValores().length/intervalos;
-//        double rangoM;
-//        DefaultTableModel tm = (DefaultTableModel) table.getModel();
-//        
-//        for (int i = 0; i < response.length; i++) {
+        double rangoM;
+        DefaultTableModel tm = (DefaultTableModel) table.getModel();
+        
+       // for (int i = 0; i < response.length; i++) {
 //            if (i == 0) {
 //                rangoM = rango;
 //                tm.addRow(new Object[]{"0.00 - "+in.format(rangoM),i, response[i][1], frecEsp, c.format(estadisticoPrueba(response,frecEsp,i))});
@@ -58,7 +58,7 @@ public class UniformeTestTable extends javax.swing.JFrame {
 //                }
 //                
 //            }
-//        }
+    //    }
         int frecSumaObservadas = 0, contAux = 0;
         int frecSumaEsp = 0;
         int vueltas = 1, ultimoValor = 0;

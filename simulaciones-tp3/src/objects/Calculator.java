@@ -40,8 +40,8 @@ public class Calculator {
         return vec;
     }
     
-     public float[][] matrizFrecuenciaUniforme(Uniforme uniforme, float rango, int intervalos){
-        float [][] m = new float [intervalos][2];
+     public float[][][] matrizFrecuenciaUniforme(Uniforme uniforme, float rango, int intervalos){
+        float [][][] m = armadoVector(rango, intervalos);
         float comparador;
         float [] randomVec = uniforme.getVecValores();
         
@@ -49,7 +49,7 @@ public class Calculator {
             comparador = rango;
             for (int j = 0; j < intervalos; j++) {
                 if (randomVec[i]<comparador) {
-                    m[j][1]++;
+                    m[j][j][2]++;
                     break;
                 }
                 else{
@@ -59,4 +59,18 @@ public class Calculator {
         }        
         return m;
     }
+     
+     public float[][][] armadoVector(float rango,int intervalos){
+     float [][][] m = new float [intervalos][intervalos][3];
+     float desde = rango;
+     float hasta = desde+rango;
+     
+         for (int i = 0; i < m.length; i++) {
+             m[i][i][0]= desde;
+             m[i][i][1]=hasta;
+             desde = hasta;
+             hasta+=rango;
+         }
+             return m;
+     }
 }
