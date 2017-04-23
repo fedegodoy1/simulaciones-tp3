@@ -27,74 +27,57 @@ public class UniformeTestTable extends javax.swing.JFrame {
 
     //public UniformeTestTable(Controller cont, int[][] response, float[]vec, float rango, int cantIntervalos) {
     public UniformeTestTable(Controller cont, Uniforme uniformeValues, int intervalos) {
-        float rango = calcularRango(uniformeValues.getDesde(),uniformeValues.getHasta(), intervalos);
+        float rango = calcularRango(uniformeValues.getDesde(), uniformeValues.getHasta(), intervalos);
         controller = cont;
-        float [][][] matriz = calculator.matrizFrecuenciaUniforme(uniformeValues, rango, intervalos);
-        
+        float[][][] matriz = calculator.matrizFrecuenciaUniforme(uniformeValues, rango, intervalos);
+
         initComponents();
         DecimalFormat in = new DecimalFormat("0.00");
-        DecimalFormat aleat = new DecimalFormat("0.0000");
         DecimalFormat c = new DecimalFormat("0.000");
         int contador = 0;
-        int frecEsp = (int) uniformeValues.getVecValores().length/intervalos;
-        
+        int frecEsp = (int) uniformeValues.getVecValores().length / intervalos;
+
         //double rangoM;
         DefaultTableModel tm = (DefaultTableModel) table.getModel();
-        
+
         for (int i = 0; i < matriz.length; i++) {
-//            if (i == 0) {
-        //tm.addRow(new Object[]{( in.format(matriz[i][i][0])+' - '+ in.format(matriz[i][i][1])), i, matriz[i][i][2], frecEsp, c.format(estadisticoPrueba(matriz[i][i][2],frecEsp,i))});
-              //  contador++;
-//            }
-//            else{
-//                if (contador == 1) {
-//                    tm.addRow(new Object[]{in.format(rango)+" - "+in.format(rango+rango),i, response[i][1], frecEsp, c.format(estadisticoPrueba(response,frecEsp,i))});
-//                    contador ++;
-//                }
-//                else{
-//                   tm.addRow(new Object[]{in.format(rango*contador)+" - "+in.format((rango*contador)+rango),i, response[i][1], frecEsp, c.format(estadisticoPrueba(response,frecEsp,i))});
-//                   contador++; 
-//                }
-//                
-//            }
+            tm.addRow(new Object[]{in.format(matriz[i][i][0]) + " - " + in.format(matriz[i][i][1]), i, matriz[i][i][2], frecEsp, c.format(estadisticoPrueba(matriz[i][i][2], frecEsp, i))});
         }
         int frecSumaObservadas = 0, contAux = 0;
         int frecSumaEsp = 0;
         int vueltas = 1, ultimoValor = 0;
         boolean end = false;
-//        rangoM = 0;
-//        Double [][] r = new Double[tm.getRowCount()][3];
-//        double estadisticoTotal = 0;
-//        DefaultTableModel tm2 = (DefaultTableModel) tablaFE.getModel();
-//        if(frecEsp < 5){
-//            
-//            for (int i = 0; i <= tm.getRowCount(); i++) {
-//                if(frecSumaEsp < 5){   
-//                    if(i==tm.getRowCount())//significa que termino de buscar en las filas y aun la fe es menor a 5
-//                    {
-//                        int valorE = (int)tm2.getValueAt((tm2.getRowCount()-1), 2);
-//                        int valorO = (int)tm2.getValueAt((tm2.getRowCount()-1), 1);
-//                        
-//                        valorE += frecSumaEsp;
-//                        valorO += frecSumaObservadas;
-//                        
-//                        tm2.setValueAt(valorE, (tm2.getRowCount()-1), 2);
-//                        tm2.setValueAt(valorO, (tm2.getRowCount()-1), 1);
-//                        
-//                        double desde = 0;
-//                        desde = r[tm2.getRowCount()-1][0];
-//                        tm2.setValueAt(in.format(desde)+" - 1,00", (tm2.getRowCount()-1), 0);
-//                        
-//                        double estadis= (double) Math.pow((valorE - valorO),2)/valorE;
-//                        tm2.setValueAt(estadis, (tm2.getRowCount()-1), 3);
-//                        
-//                        break;
-//                    }
-//                    frecSumaEsp += (int)tm.getValueAt(i, 3);
-//                    frecSumaObservadas += (int) tm.getValueAt(i, 2);
-//                    vueltas++;
-//                }
-//                else{
+        Double[][] r = new Double[tm.getRowCount()][3];
+        double estadisticoTotal = 0;
+        DefaultTableModel tm2 = (DefaultTableModel) tablaFE.getModel();
+        if (frecEsp < 5) {
+
+            for (int i = 0; i <= tm.getRowCount(); i++) {
+                if (frecSumaEsp < 5) {
+                    if (i == tm.getRowCount())//significa que termino de buscar en las filas y aun la fe es menor a 5
+                    {
+                        int valorE = (int) tm2.getValueAt((tm2.getRowCount() - 1), 2);
+                        int valorO = (int) tm2.getValueAt((tm2.getRowCount() - 1), 1);
+
+                        valorE += frecSumaEsp;
+                        valorO += frecSumaObservadas;
+
+                        tm2.setValueAt(valorE, (tm2.getRowCount() - 1), 2);
+                        tm2.setValueAt(valorO, (tm2.getRowCount() - 1), 1);
+
+                        double desde = 0;
+                        desde = r[tm2.getRowCount() - 1][0];
+                        tm2.setValueAt(in.format(desde) + " - 1,00", (tm2.getRowCount() - 1), 0);
+
+                        double estadis = (double) Math.pow((valorE - valorO), 2) / valorE;
+                        tm2.setValueAt(estadis, (tm2.getRowCount() - 1), 3);
+
+                        break;
+                    }
+                    frecSumaEsp += (int) tm.getValueAt(i, 3);
+                    frecSumaObservadas += (int) tm.getValueAt(i, 2);
+                    vueltas++;
+                } else {
 //                    rangoM = 0;
 //                    for (int j = 0; j < vueltas-1; j++) {
 //                        rangoM += rango;
@@ -138,47 +121,44 @@ public class UniformeTestTable extends javax.swing.JFrame {
 //                            }
 //                        }
 //                    }while(end != true);
-//                }
-//            }
-//        }
-//        
-//        //para mostrar los valores generados
-//        String acum = "";
-//        for (int i = 0; i < vec.length; i++) {
-//            acum += "Valor "+(i+1)+": "+aleat.format(vec[i])+".\n";
-//        }
-//        txt_valoresGenerados.setText(acum);
-//        
-//        _gradosLib_agrupado.setText(""+gradosLibertad(tm2.getRowCount()));
-//        txt_nuevo_estadistico.setText(""+c.format(estadisticoTotal));
-//        
-//        //para el calculo de mi estadistico de prueba total
-//        txt_estadistico.setText(""+c.format(estadisticoPruebaTotal(response,frecEsp)));
-//        txt_grados.setText(""+gradosLibertad(cantIntervalos));
-//        
+                }
+            }
+        }
+
+        String valoresGenerados = valoresGenerados(uniformeValues);
+        txt_valoresGenerados.setText(valoresGenerados);
+
+        _gradosLib_agrupado.setText("" + gradosLibertad(tm2.getRowCount()));
+        txt_nuevo_estadistico.setText("" + c.format(estadisticoTotal));
+
+        //para el calculo de mi estadistico de prueba total
+        txt_estadistico.setText("" + c.format(estadisticoPruebaTotal(matriz, frecEsp)));
+        txt_grados.setText("" + gradosLibertad(cantIntervalos));
+
 //        valoresGenerados = vec;
 //        this.cantIntervalos = cantIntervalos;
 //      //  agregarHistograma();
     }
-//    
-    public double estadisticoPrueba(float frecObs, int frecEsp, int loop){
+
+    public double estadisticoPrueba(float frecObs, int frecEsp, int loop) {
         double res = 0;//(Math.pow((response[i][1]-frecEsp),2))/frecEsp;
-        res = (double)(Math.pow(frecObs - frecEsp,2))/frecEsp;
+        res = (double) (Math.pow(frecObs - frecEsp, 2)) / frecEsp;
         return res;
     }
-//    public int gradosLibertad(int intervalo){
-//        return intervalo - 0 -1;
-//    }
-//    
-//    public double estadisticoPruebaTotal(int[][] response, int frecEsp){
-//        double res = 0, a = 0;//(Math.pow((response[i][1]-frecEsp),2))/frecEsp;
-//        for (int i = 0; i < response.length; i++) {
-//            a += (double)(Math.pow(response[i][1] - frecEsp,2))/frecEsp;
-//        }
-//        res = a;
-//        return res;
-   // }
-    
+
+    public int gradosLibertad(int intervalo) {
+        return intervalo - 0 - 1;
+    }
+
+    public double estadisticoPruebaTotal(float [][][] matriz, int frecEsp) {
+        double res = 0, a = 0;//(Math.pow((response[i][1]-frecEsp),2))/frecEsp;
+        for (int i = 0; i < matriz.length; i++) {
+            a += (double) (Math.pow(matriz[i][i][2] - frecEsp, 2)) / frecEsp;
+        }
+        res = a;
+        return res;
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -385,7 +365,7 @@ public class UniformeTestTable extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButton1ActionPerformed
     {//GEN-HEADEREND:event_jButton1ActionPerformed
         // TODO add your handling code here:
-      //  controller.volverDeTestRandomJava();
+        //  controller.volverDeTestRandomJava();
         dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -396,7 +376,6 @@ public class UniformeTestTable extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField _gradosLib_agrupado;
@@ -430,18 +409,26 @@ public class UniformeTestTable extends javax.swing.JFrame {
 //        panelHistograma.add(histoPanel);
 //        panelHistograma.validate();
 //    }
-
-    private double[] obtenerValoresEnDouble()
-    {
+    private double[] obtenerValoresEnDouble() {
         double[] ret = new double[valoresGenerados.length];
-        for (int i = 0; i < valoresGenerados.length; i++)
-        {
+        for (int i = 0; i < valoresGenerados.length; i++) {
             ret[i] = (double) valoresGenerados[i];
         }
         return ret;
     }
-    
-    private float calcularRango(int desde, int hasta, int cantIntervalos){
-        return (hasta-desde)/cantIntervalos;
+
+    private float calcularRango(int desde, int hasta, int cantIntervalos) {
+        return (hasta - desde) / cantIntervalos;
+    }
+
+    private String valoresGenerados(Uniforme uniformeValues) {
+        //para mostrar los valores generados
+        String acum = "";
+        DecimalFormat aleat = new DecimalFormat("0.0000");
+        float[] numerosAleatorios = uniformeValues.getVecValores();
+        for (int i = 0; i < numerosAleatorios.length; i++) {
+            acum += "Valor " + (i + 1) + ": " + aleat.format(numerosAleatorios[i]) + ".\n";
+        }
+        return acum;
     }
 }
