@@ -40,25 +40,28 @@ public class UniformeTestTable extends javax.swing.JFrame {
         DefaultTableModel tm = (DefaultTableModel) table.getModel();
 
         for (int i = 0; i < matriz.length; i++) {
-            tm.addRow(new Object[]{in.format(matriz[i][i][0]) + " - " + in.format(matriz[i][i][1]), i+1, matriz[i][i][2], frecEsp, c.format(estadisticoPrueba(matriz[i][i][2], frecEsp, i))});
+            tm.addRow(new Object[]{in.format(matriz[i][i][0]) + " - " + in.format(matriz[i][i][1]), i + 1, matriz[i][i][2], frecEsp, c.format(estadisticoPrueba(matriz[i][i][2], frecEsp, i))});
         }
-        int frecSumaObservadas = 0;
-        int frecSumaEsp = 0;
-        int vueltas = 1, ultimoValor = 0;
-        boolean end = false;
-        Double[][] r = new Double[tm.getRowCount()][3];
-        double estadisticoTotal = 0;
-        DefaultTableModel tm2 = (DefaultTableModel) tablaFE.getModel();
         
+        DefaultTableModel tm2 = (DefaultTableModel) tablaFE.getModel();
+
         if (frecEsp < 5) {
-            int contAux = 0;
-            int frecuenciaAcumulada;
+            int frecuenciaAcumulada=0;
+            int frecObsAcumulada=0;
+            int a= (int) tm.getValueAt(0, 3)+(int) tm.getValueAt(1, 3);
+            int inicio = 0;
             for (int i = 0; i <= tm.getRowCount(); i++) {
-                frecuenciaAcumulada = (Integer)tm.getValueAt(i, 3) + (Integer)tm.getValueAt(i, 3);
-                if (frecuenciaAcumulada>=5) {
-               //     tm2.setValueAt(valorE, (tm2.getRowCount() - 1), 2);
+                frecuenciaAcumulada += (int) tm.getValueAt(i, 3);
+                frecObsAcumulada += matriz[i][i][2];
+                if (frecuenciaAcumulada >= 5) {
+                 tm2.addRow(new Object[]{matriz[inicio][inicio][0] + " - " + matriz[i][i][1], frecObsAcumulada, frecuenciaAcumulada, estadisticoPrueba(frecObsAcumulada, (int)frecuenciaAcumulada,i)});
+                    inicio = i+1;
+                    frecuenciaAcumulada =0;
+                    frecObsAcumulada =0;
+                    break;
                 }
-                if (frecSumaEsp < 5) {
+                
+//                if (frecSumaEsp < 5) {
 //                    if (i == tm.getRowCount())//significa que termino de buscar en las filas y aun la fe es menor a 5
 //                    {
 //                        int valorE = (int) tm2.getValueAt((tm2.getRowCount() - 1), 2);
@@ -82,15 +85,15 @@ public class UniformeTestTable extends javax.swing.JFrame {
 //                    frecSumaEsp += (int) tm.getValueAt(i, 3);
 //                    frecSumaObservadas += (int) tm.getValueAt(i, 2);
 //                    vueltas++;
-                } else {
+            }
+            //else {
 //                    rangoM = 0;
 //                    for (int j = 0; j < vueltas-1; j++) {
 //                        rangoM += rango;
 //                    }
 //                   
-               
-                   // do{
-                        
+
+            // do{
 //                        if(contAux == 0){
 //                            
 //                            contAux++;
@@ -128,37 +131,34 @@ public class UniformeTestTable extends javax.swing.JFrame {
 //                            }
 //                        }
 //                    }while(end != true);
-                }
-            }
+            // }
+            // }
         }
 
         String valoresGenerados = valoresGenerados(uniformeValues);
         txt_valoresGenerados.setText(valoresGenerados);
 
         _gradosLib_agrupado.setText("" + gradosLibertad(tm2.getRowCount()));
-        txt_nuevo_estadistico.setText("" + c.format(estadisticoTotal));
+     //   txt_nuevo_estadistico.setText("" + c.format(estadisticoTotal));
 
         //para el calculo de mi estadistico de prueba total
         txt_estadistico.setText("" + c.format(estadisticoPruebaTotal(matriz, frecEsp)));
         txt_grados.setText("" + gradosLibertad(intervalos));
 
-   //     valoresGenerados = vec;
+        //     valoresGenerados = vec;
 //      //  agregarHistograma();
-    
-    this.setVisible(true);
+        this.setVisible(true);
     }
 
     public double estadisticoPrueba(float frecObs, int frecEsp, int loop) {
-        double res = 0;
-        res = (double) (Math.pow(frecObs - frecEsp, 2)) / frecEsp;
-        return res;
+       return (double) (Math.pow(frecObs - frecEsp, 2)) / frecEsp;
     }
 
     public int gradosLibertad(int intervalo) {
         return intervalo - 0 - 1;
     }
 
-    public double estadisticoPruebaTotal(float [][][] matriz, int frecEsp) {
+    public double estadisticoPruebaTotal(float[][][] matriz, int frecEsp) {
         double res = 0;
         for (int i = 0; i < matriz.length; i++) {
             res += (double) (Math.pow(matriz[i][i][2] - frecEsp, 2)) / frecEsp;
@@ -304,12 +304,11 @@ public class UniformeTestTable extends javax.swing.JFrame {
                                 .addComponent(jLabel3)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(txt_grados, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(18, 18, 18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(scfe)
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel4)
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(jLabel5)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -317,7 +316,8 @@ public class UniformeTestTable extends javax.swing.JFrame {
                                         .addGap(116, 116, 116)
                                         .addComponent(jLabel6)
                                         .addGap(18, 18, 18)
-                                        .addComponent(_gradosLib_agrupado, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                        .addComponent(_gradosLib_agrupado, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(jLabel4))
                                 .addGap(0, 0, Short.MAX_VALUE))))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(438, 438, 438)
@@ -330,18 +330,16 @@ public class UniformeTestTable extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(24, 24, 24)
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(jLabel1))
+                .addGap(2, 2, 2)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel4))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(scfe, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 277, Short.MAX_VALUE)))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 296, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addComponent(scfe, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 302, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txt_estadistico, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2)
@@ -352,7 +350,7 @@ public class UniformeTestTable extends javax.swing.JFrame {
                     .addComponent(jLabel6)
                     .addComponent(_gradosLib_agrupado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(panelHistograma, javax.swing.GroupLayout.DEFAULT_SIZE, 408, Short.MAX_VALUE)
+                .addComponent(panelHistograma, javax.swing.GroupLayout.DEFAULT_SIZE, 411, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
                 .addComponent(jButton1)
                 .addContainerGap())
@@ -405,8 +403,7 @@ public class UniformeTestTable extends javax.swing.JFrame {
     private javax.swing.JTextArea txt_valoresGenerados;
     // End of variables declaration//GEN-END:variables
 
-    private void agregarHistograma()
-    {
+    private void agregarHistograma() {
         // Tenemos que convertir los numeros generados a un vector de double.
         double[] valoresGeneradosEnDouble = obtenerValoresEnDouble();
         //Histograma histograma = new Histograma("Frecuencia de numeros random Java",
@@ -416,6 +413,7 @@ public class UniformeTestTable extends javax.swing.JFrame {
 //        panelHistograma.add(histoPanel);
 //        panelHistograma.validate();
     }
+
     private double[] obtenerValoresEnDouble() {
         double[] ret = new double[valoresGenerados.length];
         for (int i = 0; i < valoresGenerados.length; i++) {
