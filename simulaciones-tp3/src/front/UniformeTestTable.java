@@ -38,8 +38,9 @@ public class UniformeTestTable extends javax.swing.JFrame {
         DefaultTableModel tm = (DefaultTableModel) table.getModel();
         double estadisticoAcumulado=0;
         for (int i = 0; i < matriz.length; i++) {
-            estadisticoAcumulado += estadisticoPrueba(matriz[i][i][2], frecEsp);
-            tm.addRow(new Object[]{in.format(matriz[i][i][0]) + " - " + in.format(matriz[i][i][1]), i + 1, (int) matriz[i][i][2], frecEsp, c.format(estadisticoAcumulado)});
+            double estadisticoIntervalo = estadisticoPrueba(matriz[i][i][2], frecEsp);
+            estadisticoAcumulado += estadisticoIntervalo;
+            tm.addRow(new Object[]{in.format(matriz[i][i][0]) + " - " + in.format(matriz[i][i][1]), i + 1, (int) matriz[i][i][2], frecEsp, c.format(estadisticoIntervalo)});
         }
 
         String valoresGenerados = valoresGenerados(uniformeValues);
