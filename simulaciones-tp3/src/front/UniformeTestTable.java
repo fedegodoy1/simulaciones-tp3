@@ -66,12 +66,16 @@ public class UniformeTestTable extends javax.swing.JFrame {
                 {
                     if (i == tm.getRowCount() - 1) {
                         int filaAUnir = tm2.getRowCount() - 1;
-
+                        //actualizo intervalo
+                        tm2.setValueAt(matriz[inicio][inicio][0] + " - " + matriz[i][i][1], filaAUnir, 0);
+                        //frec observada
                         tm2.setValueAt(frecObsAcumulada + (int) tm2.getValueAt(filaAUnir, 1), filaAUnir, 1);
+                        //frec esperada
                         tm2.setValueAt(frecEspAcumulada + (int) tm2.getValueAt(filaAUnir, 2), filaAUnir, 2);
+                       
                         int frecObsUltima = (int) tm2.getValueAt(filaAUnir, 1);
                         int frecEspUltima = (int) tm2.getValueAt(filaAUnir, 2);
-
+                        
                         tm2.setValueAt(estadisticoPrueba(frecObsUltima, frecEspUltima), filaAUnir, 3);
                         break;
                     }
