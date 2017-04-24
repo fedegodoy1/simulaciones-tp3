@@ -7,6 +7,7 @@ package objects;
 
 import java.util.Random;
 import front.*;
+import front.exponencial.*;
 import objects.Uniforme;
 /**
  *
@@ -20,7 +21,13 @@ public class Controller {
     static Exponencial expo;
     static Poisson poisson;
     static UniformeGenerator uniforme;
-    static Generator generator;
+    static IGenerador generator;
+    
+    public static final String EXPONENCIAL = "Exponencial";
+    private static final String UNIFORME = "Uniforme";
+    public static final String POISSON = "Poisson";
+    public static final String NORMAL = "Normal";
+    
     
     protected Controller(Main menu) {
         main = menu;
@@ -59,6 +66,18 @@ public class Controller {
     public void selectedGenerator(String tipo) {
         tipoG = tipo;
         main.setVisible(false);
+        switch (tipo)
+        {
+            case EXPONENCIAL: 
+                crearGeneradorExponencial();
+                break;
+            case POISSON:
+                crearGeneradorPoisson();
+                break;
+            case NORMAL:
+                crearGeneradorNormal();
+                break;
+        }
         this.generator.setVisible(true);
         this.generator.setGeneratorType(tipo);
     }
@@ -107,5 +126,20 @@ public class Controller {
         GeneratorTable exp = new GeneratorTable(this,vec,"Normal",datosUsados);
         exp.setVisible(true);
         generator.setVisible(false);
+    }
+
+    private void crearGeneradorExponencial()
+    {
+        generator = new ExponencialGenerator(this);
+    }
+
+    private void crearGeneradorPoisson()
+    {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    private void crearGeneradorNormal()
+    {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

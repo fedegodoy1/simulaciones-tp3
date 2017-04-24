@@ -18,7 +18,7 @@ public class Calculator {
         
         for (int i = 0; i < vec.length; i++) {
             randomValue = random.nextFloat();
-            op = mediaNegativa* (float)Math.log(1-randomValue);
+            op = mediaNegativa * (float)Math.log(1-randomValue);
             vec[i]=op;
         }
         
@@ -70,4 +70,86 @@ public class Calculator {
          }
              return m;
      }
+     
+    public static void quicksort(float valores[], int izq, int der)
+    {
+
+        float pivote = valores[izq]; // tomamos primer elemento como pivote
+        int i = izq; // i realiza la búsqueda de izquierda a derecha
+        int j = der; // j realiza la búsqueda de derecha a izquierda
+        float aux;
+
+        while (i < j)
+        {            // mientras no se crucen las búsquedas
+            while (valores[i] <= pivote && i < j)
+            {
+                i++; // busca elemento mayor que pivote
+            }
+            while (valores[j] > pivote)
+            {
+                j--;         // busca elemento menor que pivote
+            }
+            if (i < j)
+            {                      // si no se han cruzado                      
+                aux = valores[i];                  // los intercambia
+                valores[i] = valores[j];
+                valores[j] = aux;
+            }
+        }
+        valores[izq] = valores[j]; // se coloca el pivote en su lugar de forma que tendremos
+        valores[j] = pivote; // los menores a su izquierda y los mayores a su derecha
+        if (izq < j - 1)
+        {
+            quicksort(valores, izq, j - 1); // ordenamos subarray izquierdo
+        }
+        if (j + 1 < der)
+        {
+            quicksort(valores, j + 1, der); // ordenamos subarray derecho
+        }
+        
+    }
+        
+     public float[][] matrizFrecuenciaExponencial(float valores[], float rango, int intervalos, float minimo)
+    {
+        //Se arranca con el extremo minimo y vamos agregando el rango definido a cada intervalo
+        float[][] vectorFrecuencias = armadoRangosExponencial(minimo, rango, intervalos);
+
+        for (int i = 0; i < valores.length; i++)
+        {
+            for (int j = 0; j < intervalos; j++)
+            {
+
+                //vectorFrecuencias[j][0] tiene el desde y el vectorFrecuencias[j][1] el hasta,
+                //y vectorFrecuencias[j][2] la frecuencia obtenida
+                // Si el valor actual es menor al extremo superior del intervalo
+                if (valores[i] < vectorFrecuencias[j][1])
+                {
+                    // Incremento Frecuencia
+                    vectorFrecuencias[j][2]++;
+                    break;
+                }
+            }
+        }
+        return vectorFrecuencias;
+    }
+
+    private float[][] armadoRangosExponencial(float minimo, float rango, int intervalos)
+    {
+        float[][] vectorFrecuencias = new float[intervalos][3];
+        //  [0] es el limite inferior del intervalo
+        //  [1] es el limite superior del intervalo
+        //  [2] es la frecuencia del intervalo
+        
+        float inicio = minimo;
+        float hasta = minimo + rango;
+
+        for (int i = 0; i < vectorFrecuencias.length; i++)
+        {
+            vectorFrecuencias[i][0] = inicio;
+            vectorFrecuencias[i][1] = hasta;
+            inicio = hasta;
+            hasta += rango;
+        }
+        return vectorFrecuencias;
+    }
 }

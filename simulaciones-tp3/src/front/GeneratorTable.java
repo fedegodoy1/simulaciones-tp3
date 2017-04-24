@@ -1,5 +1,6 @@
 package front;
 
+import front.exponencial.*;
 import java.text.DecimalFormat;
 import javax.swing.table.DefaultTableModel;
 import objects.Controller;
@@ -11,12 +12,19 @@ import objects.Controller;
 public class GeneratorTable extends javax.swing.JFrame {
 
     Controller controller;
+    String distribucion;
+    float[] valores;
+    String[] datos;
     
     public GeneratorTable(Controller cont, float[] vec, String distribucion, String[] datos) {
         controller = cont;
         initComponents();
         
         setTitle("Distribución "+distribucion);
+        this.distribucion = distribucion;
+        
+        this.valores = vec;
+        this.datos = datos;
         
         DecimalFormat in = new DecimalFormat("0.00");
         DecimalFormat aleat = new DecimalFormat("0.0000");
@@ -28,9 +36,11 @@ public class GeneratorTable extends javax.swing.JFrame {
         }
         txt_media.setText(""+datos[1]);
         txt_cantNum.setText(""+datos[0]);
-        if(controller.getTipo()=="normal"){
+        if(controller.getTipo() == "normal"){
             txt_desviacion.setText(""+datos[2]);
         }
+        
+        acomodarADistribucion();
         setLocationRelativeTo(null);
     }
 
@@ -41,13 +51,14 @@ public class GeneratorTable extends javax.swing.JFrame {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents()
+    {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         tabla_valoresA = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
         txt_media = new javax.swing.JTextField();
-        jLabel2 = new javax.swing.JLabel();
+        _lblDesviacion = new javax.swing.JLabel();
         txt_desviacion = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         cmb_intervalo = new javax.swing.JComboBox<>();
@@ -61,18 +72,23 @@ public class GeneratorTable extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         tabla_valoresA.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
+            new Object [][]
+            {
 
             },
-            new String [] {
+            new String []
+            {
                 "Generacion", "Número aleatorio"
             }
-        ) {
-            boolean[] canEdit = new boolean [] {
+        )
+        {
+            boolean[] canEdit = new boolean []
+            {
                 false, false
             };
 
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
+            public boolean isCellEditable(int rowIndex, int columnIndex)
+            {
                 return canEdit [columnIndex];
             }
         });
@@ -82,7 +98,7 @@ public class GeneratorTable extends javax.swing.JFrame {
 
         txt_media.setEditable(false);
 
-        jLabel2.setText("Desviación estándar");
+        _lblDesviacion.setText("Desviación estándar");
 
         txt_desviacion.setEditable(false);
 
@@ -128,7 +144,7 @@ public class GeneratorTable extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(txt_media, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel2)
+                                .addComponent(_lblDesviacion)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(txt_desviacion, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
@@ -150,7 +166,7 @@ public class GeneratorTable extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(txt_media, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2)
+                    .addComponent(_lblDesviacion)
                     .addComponent(txt_desviacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel6)
                     .addComponent(txt_cantNum, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -173,11 +189,11 @@ public class GeneratorTable extends javax.swing.JFrame {
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel _lblDesviacion;
     private javax.swing.JButton btn_ejecutar;
     private javax.swing.JButton btn_volver;
     private javax.swing.JComboBox<String> cmb_intervalo;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel6;
@@ -188,4 +204,22 @@ public class GeneratorTable extends javax.swing.JFrame {
     private javax.swing.JTextField txt_desviacion;
     private javax.swing.JTextField txt_media;
     // End of variables declaration//GEN-END:variables
+
+    private void acomodarADistribucion()
+    {
+        switch (distribucion)
+        {
+            case Controller.EXPONENCIAL:
+            {
+                txt_desviacion.setVisible(false);
+                _lblDesviacion.setVisible(false);
+                
+                btn_ejecutar.addActionListener((ae) -> 
+                {
+                    new ExponencialTestTable(this, controller, valores, datos,
+                            Integer.parseInt((String) cmb_intervalo.getSelectedItem())).setVisible(true);
+                });
+            }
+        }
+    }
 }
