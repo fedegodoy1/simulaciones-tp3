@@ -36,9 +36,10 @@ public class UniformeTestTable extends javax.swing.JFrame {
         int frecEsp = (int) uniformeValues.getVecValores().length / intervalos;
 
         DefaultTableModel tm = (DefaultTableModel) table.getModel();
-
+        double estadisticoAcumulado=0;
         for (int i = 0; i < matriz.length; i++) {
-            tm.addRow(new Object[]{in.format(matriz[i][i][0]) + " - " + in.format(matriz[i][i][1]), i + 1, (int) matriz[i][i][2], frecEsp, c.format(estadisticoPrueba(matriz[i][i][2], frecEsp))});
+            estadisticoAcumulado += estadisticoPrueba(matriz[i][i][2], frecEsp);
+            tm.addRow(new Object[]{in.format(matriz[i][i][0]) + " - " + in.format(matriz[i][i][1]), i + 1, (int) matriz[i][i][2], frecEsp, c.format(estadisticoAcumulado)});
         }
 
         String valoresGenerados = valoresGenerados(uniformeValues);
@@ -46,10 +47,10 @@ public class UniformeTestTable extends javax.swing.JFrame {
         //para el calculo de mi estadistico de prueba total
         txt_grados.setText("" + gradosLibertad(tm.getRowCount()));
         //txt_estadistico.setText("" + c.format(estadisticoPruebaTotal(tm)));
-
+        txt_estadistico.setText("" + c.format(estadisticoAcumulado));
         if (frecEsp < 5) {
             DefaultTableModel tm2 = (DefaultTableModel) tablaFE.getModel();
-
+            double estadisticoTotal = 0;
             int frecEspAcumulada = 0;
             int frecObsAcumulada = 0;
             int inicio = 0;
@@ -58,7 +59,8 @@ public class UniformeTestTable extends javax.swing.JFrame {
                 frecEspAcumulada += (int) tm.getValueAt(i, 3);
                 frecObsAcumulada += matriz[i][i][2];
                 if (frecEspAcumulada >= 5) {
-                    tm2.addRow(new Object[]{matriz[inicio][inicio][0] + " - " + matriz[i][i][1], (int) frecObsAcumulada, frecEspAcumulada, estadisticoPrueba(frecObsAcumulada, (int) frecEspAcumulada)});
+                    estadisticoTotal += estadisticoPrueba(frecObsAcumulada, (int) frecEspAcumulada);
+                    tm2.addRow(new Object[]{matriz[inicio][inicio][0] + " - " + matriz[i][i][1], (int) frecObsAcumulada, frecEspAcumulada, c.format(estadisticoTotal)});
                     inicio = i + 1;
                     frecEspAcumulada = 0;
                     frecObsAcumulada = 0;
@@ -77,12 +79,13 @@ public class UniformeTestTable extends javax.swing.JFrame {
                         int frecEspUltima = (int) tm2.getValueAt(filaAUnir, 2);
                         
                         tm2.setValueAt(estadisticoPrueba(frecObsUltima, frecEspUltima), filaAUnir, 3);
+                        estadisticoTotal +=estadisticoPrueba(frecObsUltima, frecEspUltima);
                         break;
                     }
                 }
             }
             _gradosLib_agrupado.setText("" + gradosLibertad(tm2.getRowCount()));
-           // txt_nuevo_estadistico.setText("" + c.format(estadisticoPruebaTotal(tm2)));
+            txt_nuevo_estadistico.setText("" + c.format(estadisticoTotal));
         }
 
         agregarHistograma(intervalos, uniformeValues);
