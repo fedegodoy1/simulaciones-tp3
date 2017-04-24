@@ -21,7 +21,6 @@ public class UniformeTestTable extends javax.swing.JFrame {
 
     Controller controller;
     int contador;
-    float[] valoresGenerados;
     Calculator calculator = new Calculator();
 
     //public UniformeTestTable(Controller cont, int[][] response, float[]vec, float rango, int cantIntervalos) {
@@ -39,14 +38,14 @@ public class UniformeTestTable extends javax.swing.JFrame {
         DefaultTableModel tm = (DefaultTableModel) table.getModel();
 
         for (int i = 0; i < matriz.length; i++) {
-            tm.addRow(new Object[]{in.format(matriz[i][i][0]) + " - " + in.format(matriz[i][i][1]), i + 1, matriz[i][i][2], frecEsp, c.format(estadisticoPrueba(matriz[i][i][2], frecEsp))});
+            tm.addRow(new Object[]{in.format(matriz[i][i][0]) + " - " + in.format(matriz[i][i][1]), i + 1, (int) matriz[i][i][2], frecEsp, c.format(estadisticoPrueba(matriz[i][i][2], frecEsp))});
         }
 
         String valoresGenerados = valoresGenerados(uniformeValues);
         txt_valoresGenerados.setText(valoresGenerados);
         //para el calculo de mi estadistico de prueba total
         txt_grados.setText("" + gradosLibertad(tm.getRowCount()));
-        txt_estadistico.setText("" + c.format(estadisticoPruebaTotal(tm)));
+        //txt_estadistico.setText("" + c.format(estadisticoPruebaTotal(tm)));
 
         if (frecEsp < 5) {
             DefaultTableModel tm2 = (DefaultTableModel) tablaFE.getModel();
@@ -59,7 +58,7 @@ public class UniformeTestTable extends javax.swing.JFrame {
                 frecEspAcumulada += (int) tm.getValueAt(i, 3);
                 frecObsAcumulada += matriz[i][i][2];
                 if (frecEspAcumulada >= 5) {
-                    tm2.addRow(new Object[]{matriz[inicio][inicio][0] + " - " + matriz[i][i][1], frecObsAcumulada, frecEspAcumulada, estadisticoPrueba(frecObsAcumulada, (int) frecEspAcumulada)});
+                    tm2.addRow(new Object[]{matriz[inicio][inicio][0] + " - " + matriz[i][i][1], (int) frecObsAcumulada, frecEspAcumulada, estadisticoPrueba(frecObsAcumulada, (int) frecEspAcumulada)});
                     inicio = i + 1;
                     frecEspAcumulada = 0;
                     frecObsAcumulada = 0;
@@ -79,10 +78,10 @@ public class UniformeTestTable extends javax.swing.JFrame {
                 }
             }
             _gradosLib_agrupado.setText("" + gradosLibertad(tm2.getRowCount()));
-            txt_nuevo_estadistico.setText("" + c.format(estadisticoPruebaTotal(tm2)));
+           // txt_nuevo_estadistico.setText("" + c.format(estadisticoPruebaTotal(tm2)));
         }
 
-//  agregarHistograma();
+        agregarHistograma(intervalos, uniformeValues);
         this.setVisible(true);
     }
 
@@ -95,14 +94,16 @@ public class UniformeTestTable extends javax.swing.JFrame {
     }
 
     public double estadisticoPruebaTotal(DefaultTableModel tm) {
+        DecimalFormat c = new DecimalFormat("0.000");
         int paraTabla = 4;
         //si es la primer tabla suma los de la columna 4, si es la segunda tabla suma los de la columna 3
         if (tm.getColumnCount() == 4) {
             paraTabla = 3;
         }
         double res = 0;
+        String output;
         for (int i = 0; i < tm.getRowCount(); i++) {
-            res += new Double(tm.getValueAt(i, paraTabla).toString());
+          // output += (String)tm.getValueAt(i, paraTabla);
         }
         return res;
     }
@@ -344,27 +345,27 @@ public class UniformeTestTable extends javax.swing.JFrame {
     private javax.swing.JTextArea txt_valoresGenerados;
     // End of variables declaration//GEN-END:variables
 
-    private void agregarHistograma() {
+    private void agregarHistograma(int cantIntervalos, Uniforme uniformeValues) {
         // Tenemos que convertir los numeros generados a un vector de double.
-        double[] valoresGeneradosEnDouble = obtenerValoresEnDouble();
-        //Histograma histograma = new Histograma("Frecuencia de numeros random Java",
-//                "Histograma del Random de Java", valoresGeneradosEnDouble, cantIntervalos);
-//        JPanel histoPanel = histograma.obtenerPanel();
-//        histoPanel.setVisible(true);
-//        panelHistograma.add(histoPanel);
-//        panelHistograma.validate();
+        Histograma histograma = new Histograma("Frecuencia de numeros random Java",
+        "Histograma del Random de Java", obtenerValoresEnDouble(uniformeValues), cantIntervalos);
+        JPanel histoPanel = histograma.obtenerPanel();
+        histoPanel.setVisible(true);
+        panelHistograma.add(histoPanel);
+        panelHistograma.validate();
     }
 
-    private double[] obtenerValoresEnDouble() {
-        double[] ret = new double[valoresGenerados.length];
-        for (int i = 0; i < valoresGenerados.length; i++) {
-            ret[i] = (double) valoresGenerados[i];
+    private double[] obtenerValoresEnDouble(Uniforme uniformeValues) {
+        float valoresAleatorios[] = uniformeValues.getVecValores();
+        double[] ret = new double[valoresAleatorios.length];
+        for (int i = 0; i < valoresAleatorios.length; i++) {
+            ret[i] = (double) valoresAleatorios[i];
         }
         return ret;
     }
 
     private float calcularRango(int desde, int hasta, int cantIntervalos) {
-        return (hasta - desde) / cantIntervalos;
+        return (float)(hasta - desde) / cantIntervalos;
     }
 
     private String valoresGenerados(Uniforme uniformeValues) {

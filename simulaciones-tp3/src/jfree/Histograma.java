@@ -12,28 +12,30 @@ import org.jfree.data.statistics.*;
 import org.jfree.data.xy.*;
 import org.jfree.ui.*;
 
-public class Histograma extends ApplicationFrame
+public class Histograma
 {
 
     double[] valores;
     int cantIntervalos;
     JPanel chartPanel;
+    String titulo;
+    String nombreFrecuencia;
     
-    public Histograma(String title, double[] valores, int cantIntervalos)
+    public Histograma(String nombreFrec, String tituloHistograma, double[] valores, int cantIntervalos)
     {
-        super(title);
+        titulo = tituloHistograma;
+        nombreFrecuencia = nombreFrec;
         this.valores = valores;
         this.cantIntervalos = cantIntervalos;
         chartPanel = crearPanel();
         chartPanel.setPreferredSize(new java.awt.Dimension(500, 475));
-        setContentPane(chartPanel);
     }
 
     private  IntervalXYDataset crearDataset()
     {
         HistogramDataset dataset = new HistogramDataset();
 
-        dataset.addSeries("Frecuencias de los ingresos", valores, cantIntervalos, 0.0, 1.0);
+        dataset.addSeries(nombreFrecuencia, valores, cantIntervalos, 0.0, 1.0);
         dataset.setType(HistogramType.FREQUENCY);
         return dataset;
     }
@@ -41,7 +43,7 @@ public class Histograma extends ApplicationFrame
     private JFreeChart crearChart(IntervalXYDataset dataset)
     {
         JFreeChart chart = ChartFactory.createHistogram(
-                "Histograma",
+                titulo,
                 "Intervalo",
                 "Frecuencia",
                 dataset,
