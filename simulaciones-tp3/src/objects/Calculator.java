@@ -57,7 +57,7 @@ public class Calculator {
         return m;
     }
      
-     public float[][][] armadoRangos(int desde,float rango,int intervalos){
+     public float[][][] armadoRangos(int desde, float rango,int intervalos){
      float [][][] m = new float [intervalos][intervalos][3];
      float inicio = desde;
      float hasta = desde+rango;

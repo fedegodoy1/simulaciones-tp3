@@ -36,132 +36,67 @@ public class UniformeTestTable extends javax.swing.JFrame {
         int contador = 0;
         int frecEsp = (int) uniformeValues.getVecValores().length / intervalos;
 
-        //double rangoM;
         DefaultTableModel tm = (DefaultTableModel) table.getModel();
 
         for (int i = 0; i < matriz.length; i++) {
-            tm.addRow(new Object[]{in.format(matriz[i][i][0]) + " - " + in.format(matriz[i][i][1]), i + 1, matriz[i][i][2], frecEsp, c.format(estadisticoPrueba(matriz[i][i][2], frecEsp, i))});
+            tm.addRow(new Object[]{in.format(matriz[i][i][0]) + " - " + in.format(matriz[i][i][1]), i + 1, matriz[i][i][2], frecEsp, c.format(estadisticoPrueba(matriz[i][i][2], frecEsp))});
         }
-        
+
         DefaultTableModel tm2 = (DefaultTableModel) tablaFE.getModel();
 
         if (frecEsp < 5) {
-            int frecuenciaAcumulada=0;
-            int frecObsAcumulada=0;
-            int a= (int) tm.getValueAt(0, 3)+(int) tm.getValueAt(1, 3);
+            int frecEspAcumulada = 0;
+            int frecObsAcumulada = 0;
             int inicio = 0;
-            for (int i = 0; i <= tm.getRowCount(); i++) {
-                frecuenciaAcumulada += (int) tm.getValueAt(i, 3);
-                frecObsAcumulada += matriz[i][i][2];
-                if (frecuenciaAcumulada >= 5) {
-                 tm2.addRow(new Object[]{matriz[inicio][inicio][0] + " - " + matriz[i][i][1], frecObsAcumulada, frecuenciaAcumulada, estadisticoPrueba(frecObsAcumulada, (int)frecuenciaAcumulada,i)});
-                    inicio = i+1;
-                    frecuenciaAcumulada =0;
-                    frecObsAcumulada =0;
-                    break;
-                }
-                
-//                if (frecSumaEsp < 5) {
-//                    if (i == tm.getRowCount())//significa que termino de buscar en las filas y aun la fe es menor a 5
-//                    {
-//                        int valorE = (int) tm2.getValueAt((tm2.getRowCount() - 1), 2);
-//                        int valorO = (int) tm2.getValueAt((tm2.getRowCount() - 1), 1);
-//
-//                        valorE += frecSumaEsp;
-//                        valorO += frecSumaObservadas;
-//
-//                        tm2.setValueAt(valorE, (tm2.getRowCount() - 1), 2);
-//                        tm2.setValueAt(valorO, (tm2.getRowCount() - 1), 1);
-//
-//                        double desde = 0;
-//                        desde = r[tm2.getRowCount() - 1][0];
-//                        tm2.setValueAt(in.format(desde) + " - 1,00", (tm2.getRowCount() - 1), 0);
-//
-//                        double estadis = (double) Math.pow((valorE - valorO), 2) / valorE;
-//                        tm2.setValueAt(estadis, (tm2.getRowCount() - 1), 3);
-//
-//                        break;
-//                    }
-//                    frecSumaEsp += (int) tm.getValueAt(i, 3);
-//                    frecSumaObservadas += (int) tm.getValueAt(i, 2);
-//                    vueltas++;
-            }
-            //else {
-//                    rangoM = 0;
-//                    for (int j = 0; j < vueltas-1; j++) {
-//                        rangoM += rango;
-//                    }
-//                   
 
-            // do{
-//                        if(contAux == 0){
-//                            
-//                            contAux++;
-//                            ultimoValor = vueltas;
-//                            
-//                            r[0][0] = 0.0;
-//                           // r[0][1] = rangoM;
-//                            double estadisticoParcial=(double)(Math.pow((frecSumaObservadas-frecSumaEsp),2))/frecSumaEsp;
-//                            tm2.addRow(new Object[]{"0.00 - "+ in.format(rangoM), frecSumaObservadas, frecSumaEsp, c.format(estadisticoParcial)});
-//                            estadisticoTotal += estadisticoParcial;
-//                            frecSumaEsp = 0;
-//                            frecSumaObservadas = 0;
-//                            i = i-1;
-//                            end = true;
-//                        }
-//                        else if(contAux != 0){
-//                            double rangoM2 = r[contAux-1][1];
-//                            double estadisticoParcial=(double)(Math.pow((frecSumaObservadas-frecSumaEsp),2))/frecSumaEsp;
-//                            estadisticoTotal += estadisticoParcial;
-//                            tm2.addRow(new Object[]{in.format(rangoM2)+" - "+ in.format(rangoM), frecSumaObservadas, frecSumaEsp, c.format(estadisticoParcial)});
-//                            
-//                            r[contAux][0]=rangoM2;
-//                           // r[contAux][1]=rangoM;
-//                            
-//                            ultimoValor = vueltas-1;
-//                            frecSumaEsp = 0;
-//                            frecSumaObservadas = 0;
-//                            contAux++;
-//                            if(i==tm.getRowCount()){
-//                                end = true;
-//                            }
-//                            else{
-//                                i = i-1;
-//                                end = true;
-//                            }
-//                        }
-//                    }while(end != true);
-            // }
-            // }
+            for (int i = 0; i < tm.getRowCount(); i++) {
+                frecEspAcumulada += (int) tm.getValueAt(i, 3);
+                frecObsAcumulada += matriz[i][i][2];
+                if (frecEspAcumulada >= 5) {
+                    tm2.addRow(new Object[]{matriz[inicio][inicio][0] + " - " + matriz[i][i][1], frecObsAcumulada, frecEspAcumulada, estadisticoPrueba(frecObsAcumulada, (int) frecEspAcumulada)});
+                    inicio = i + 1;
+                    frecEspAcumulada = 0;
+                    frecObsAcumulada = 0;
+                } else // ultima vuelta y no suma 5, le appendeo lo acumulado a la ultima fila que armé
+                 if (i == tm.getRowCount() - 1) {
+                        int filaAUnir = tm2.getRowCount() - 1;
+
+                        tm2.setValueAt(frecObsAcumulada + (int) tm2.getValueAt(filaAUnir, 1), filaAUnir, 1);
+                        tm2.setValueAt(frecEspAcumulada + (int) tm2.getValueAt(filaAUnir, 2), filaAUnir, 2);
+                        int frecObsUltima = (int) tm2.getValueAt(filaAUnir, 1);
+                        int frecEspUltima = (int) tm2.getValueAt(filaAUnir, 2);
+                        tm2.setValueAt(estadisticoPrueba(frecObsUltima, frecEspUltima), filaAUnir, 3);
+                        break;
+                    }
+            }
         }
 
         String valoresGenerados = valoresGenerados(uniformeValues);
         txt_valoresGenerados.setText(valoresGenerados);
 
         _gradosLib_agrupado.setText("" + gradosLibertad(tm2.getRowCount()));
-     //   txt_nuevo_estadistico.setText("" + c.format(estadisticoTotal));
+        //   txt_nuevo_estadistico.setText("" + c.format(estadisticoTotal));
 
         //para el calculo de mi estadistico de prueba total
-        txt_estadistico.setText("" + c.format(estadisticoPruebaTotal(matriz, frecEsp)));
-        txt_grados.setText("" + gradosLibertad(intervalos));
+        txt_estadistico.setText("" + c.format(estadisticoPruebaTotal(tm2)));
+        txt_grados.setText("" + gradosLibertad(tm2.getRowCount()));
 
-        //     valoresGenerados = vec;
 //      //  agregarHistograma();
         this.setVisible(true);
     }
 
-    public double estadisticoPrueba(float frecObs, int frecEsp, int loop) {
-       return (double) (Math.pow(frecObs - frecEsp, 2)) / frecEsp;
+    public double estadisticoPrueba(float frecObs, int frecEsp) {
+        return (double) (Math.pow(frecObs - frecEsp, 2)) / frecEsp;
     }
 
     public int gradosLibertad(int intervalo) {
         return intervalo - 0 - 1;
     }
 
-    public double estadisticoPruebaTotal(float[][][] matriz, int frecEsp) {
+    public double estadisticoPruebaTotal(DefaultTableModel tm2) {
         double res = 0;
-        for (int i = 0; i < matriz.length; i++) {
-            res += (double) (Math.pow(matriz[i][i][2] - frecEsp, 2)) / frecEsp;
+        for (int i = 0; i < tm2.getRowCount(); i++) {
+            res += (double) tm2.getValueAt(i, 3);
         }
         return res;
     }
