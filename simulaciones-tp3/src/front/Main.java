@@ -28,7 +28,8 @@ public class Main extends javax.swing.JFrame {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents()
+    {
 
         jLabel1 = new javax.swing.JLabel();
         btn_uniforme = new javax.swing.JButton();
@@ -41,29 +42,37 @@ public class Main extends javax.swing.JFrame {
         jLabel1.setText("Seleccione distribucion a generar");
 
         btn_uniforme.setText("Uniforme");
-        btn_uniforme.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        btn_uniforme.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 btn_uniformeActionPerformed(evt);
             }
         });
 
         btn_normal.setText("Normal");
-        btn_normal.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        btn_normal.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 btn_normalActionPerformed(evt);
             }
         });
 
         btn_exponencial.setText("Exponencial");
-        btn_exponencial.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        btn_exponencial.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 btn_exponencialActionPerformed(evt);
             }
         });
 
         btn_poisson.setText("Poisson");
-        btn_poisson.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        btn_poisson.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 btn_poissonActionPerformed(evt);
             }
         });
@@ -109,15 +118,15 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_btn_uniformeActionPerformed
 
     private void btn_normalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_normalActionPerformed
-        controller.selectedGenerator("normal");
+        controller.selectedGenerator(Controller.NORMAL);
     }//GEN-LAST:event_btn_normalActionPerformed
 
     private void btn_exponencialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_exponencialActionPerformed
-        controller.selectedGenerator("exponencial");
+        controller.selectedGenerator(Controller.EXPONENCIAL);
     }//GEN-LAST:event_btn_exponencialActionPerformed
 
     private void btn_poissonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_poissonActionPerformed
-        controller.selectedGenerator("poisson");
+        controller.selectedGenerator(Controller.POISSON);
     }//GEN-LAST:event_btn_poissonActionPerformed
 
     /**

@@ -10,32 +10,46 @@ import org.jfree.chart.plot.*;
 import org.jfree.chart.renderer.xy.*;
 import org.jfree.data.statistics.*;
 import org.jfree.data.xy.*;
-import org.jfree.ui.*;
 
-public class Histograma
+public class Histograma 
 {
 
     double[] valores;
     int cantIntervalos;
     JPanel chartPanel;
-    String titulo;
-    String nombreFrecuencia;
+    double valorMinimo = 0.0;
+    double valorMaximo = 1.0;
+    String tituloGrafico;
+    String labelFrecuencia;
     
-    public Histograma(String nombreFrec, String tituloHistograma, double[] valores, int cantIntervalos)
+    public Histograma(String titleGrafico, String labelFrecuencia, double[] valores, int cantIntervalos)
     {
-        titulo = tituloHistograma;
-        nombreFrecuencia = nombreFrec;
         this.valores = valores;
         this.cantIntervalos = cantIntervalos;
+        this.tituloGrafico = titleGrafico;
+        this.labelFrecuencia = labelFrecuencia;
         chartPanel = crearPanel();
         chartPanel.setPreferredSize(new java.awt.Dimension(500, 475));
     }
 
+    public Histograma(String titleGrafico, String labelFrecuencia, double[] valores, int cantIntervalos, double valorMinimo, double valorMaximo)
+    {
+        
+        this.valorMinimo = valorMinimo;
+        this.valorMaximo = valorMaximo;
+        this.valores = valores;
+        this.cantIntervalos = cantIntervalos;
+        this.tituloGrafico = titleGrafico;
+        this.labelFrecuencia = labelFrecuencia;
+        chartPanel = crearPanel();
+        chartPanel.setPreferredSize(new java.awt.Dimension(500, 475));
+    }
+    
     private  IntervalXYDataset crearDataset()
     {
         HistogramDataset dataset = new HistogramDataset();
 
-        dataset.addSeries(nombreFrecuencia, valores, cantIntervalos, 0.0, 1.0);
+        dataset.addSeries(labelFrecuencia, valores, cantIntervalos, valorMinimo, valorMaximo);
         dataset.setType(HistogramType.FREQUENCY);
         return dataset;
     }
@@ -43,7 +57,7 @@ public class Histograma
     private JFreeChart crearChart(IntervalXYDataset dataset)
     {
         JFreeChart chart = ChartFactory.createHistogram(
-                titulo,
+                tituloGrafico,
                 "Intervalo",
                 "Frecuencia",
                 dataset,
@@ -52,12 +66,9 @@ public class Histograma
                 true,
                 false
         );
-//        XYPlot plot = (XYPlot) chart.getPlot();
-//        XYBarRenderer renderer = (XYBarRenderer) plot.getRenderer();
-//        renderer.setDrawBarOutline(false);
         XYPlot plot = (XYPlot) chart.getPlot();
         NumberAxis range = (NumberAxis) plot.getDomainAxis();
-        range.setTickUnit(new NumberTickUnit(1.0/cantIntervalos));
+        range.setTickUnit(new NumberTickUnit(valorMaximo/cantIntervalos));
         XYBarRenderer renderer = (XYBarRenderer) plot.getRenderer();
         renderer.setDrawBarOutline(false);
         return chart;

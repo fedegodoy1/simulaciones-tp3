@@ -11,9 +11,10 @@ import objects.Controller;
  *
  * @author federico
  */
-public class Generator extends javax.swing.JFrame {
+public class Generator extends javax.swing.JFrame implements IGenerador {
     
     Controller controller;
+    String tipo_generador;
     
     public Generator(Controller cont) {
         controller = cont;
@@ -173,6 +174,7 @@ public class Generator extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
     
     public void setGeneratorType(String tipo) {
+        tipo_generador = tipo;
         if (tipo == "exponencial" || tipo=="poisson") {
             setENOnFrame();
         }
@@ -183,6 +185,12 @@ public class Generator extends javax.swing.JFrame {
         txt_desviacion.setEnabled(false);
     }
 
-    
+    @Override
+    public String getGeneratorType()
+    {
+        return tipo_generador;
+    }
 
+
+    
 }
