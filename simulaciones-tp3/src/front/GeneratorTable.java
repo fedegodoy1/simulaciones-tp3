@@ -232,6 +232,7 @@ public class GeneratorTable extends javax.swing.JFrame {
                     new ExponencialTestTable(this, controller, valores, datos,
                             Integer.parseInt((String) cmb_intervalo.getSelectedItem())).setVisible(true);
                 });
+                break;
             }
             case Controller.NORMAL:
             {
@@ -240,6 +241,7 @@ public class GeneratorTable extends javax.swing.JFrame {
                     new NormalTestTable(this, controller, valores, datos, 
                             Integer.parseInt((String) cmb_intervalo.getSelectedItem())).setVisible(true);
                 });
+                break;
             }
         }
     }
