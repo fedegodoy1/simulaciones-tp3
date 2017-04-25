@@ -111,6 +111,13 @@ public class GeneratorTable extends javax.swing.JFrame {
         btn_ejecutar.setText("Ejecutar prueba");
 
         btn_volver.setText("Volver");
+        btn_volver.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                btn_volverActionPerformed(evt);
+            }
+        });
 
         lbl_distribucion.setText("Números aleatorios de distribución");
 
@@ -185,6 +192,12 @@ public class GeneratorTable extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btn_volverActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btn_volverActionPerformed
+    {//GEN-HEADEREND:event_btn_volverActionPerformed
+        this.dispose();
+        controller.showMenu();
+    }//GEN-LAST:event_btn_volverActionPerformed
 
     
 

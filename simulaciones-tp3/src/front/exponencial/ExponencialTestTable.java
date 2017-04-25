@@ -19,23 +19,31 @@ import front.*;
 public class ExponencialTestTable extends javax.swing.JFrame {
 
     Controller controller;
-    int contador;
-    float[] valoresGenerados;
     float rango;
-    Calculator calculator = new Calculator();
     float minimo, maximo;
     int N;
+    
+    private final static int COL_DESDE = 0;
+    private final static int COL_HASTA = 1;
+    private final static int COL_FREC_OBS = 2;
+    private final static int COL_PROB = 3;
+    private final static int COL_FREC_ESP = 4;
+    private final static int COL_ESTAD = 5;
 
     private final float media;
 
     private final float lambda;
+    
+    private int cantIntervalos;
 
-    public ExponencialTestTable(JFrame parent, Controller cont, float[] values, String[] datos, int intervalos) {
+    public ExponencialTestTable(JFrame parent, Controller cont, float[] values, String[] datos, int intervalos) 
+    {
+        cantIntervalos = intervalos;
         float[] ordenadosValues = new float[values.length];
         System.arraycopy(values, 0, ordenadosValues, 0, values.length);
-        rango = calcularRango(ordenadosValues, intervalos);
+        rango = calcularRango(ordenadosValues, cantIntervalos);
         controller = cont;
-        float[][] matriz = calculator.matrizFrecuenciaExponencial(ordenadosValues, rango, intervalos, minimo);
+        float[][] matriz = Calculator.matrizFrecuenciaExponencial(ordenadosValues, rango, cantIntervalos, minimo);
         N = Integer.parseInt(datos[0]);
         media = Float.parseFloat(datos[1]);
         lambda = (float) 1/media;
@@ -44,141 +52,47 @@ public class ExponencialTestTable extends javax.swing.JFrame {
         initComponents();
         DecimalFormat in = new DecimalFormat("0.00");
         DecimalFormat c = new DecimalFormat("0.000");
-//        int contador = 0;
-//        int frecEsp = (int) values.length / intervalos;
-
-        //double rangoM;
         DefaultTableModel tm = (DefaultTableModel) _tabla.getModel();
 
         for (int i = 0; i < matriz.length; i++)
         {
-//            tm.addRow(new Object[]{in.format(matriz[i][0]) + " - " + in.format(matriz[i][1]), i + 1, matriz[i][2], frecEsp, c.format(estadisticoPrueba(matriz[i][2], frecEsp, i))});
-//        }
             float probabilidad = calcularProbabilidad(matriz[i][0],matriz[i][1]);
             float frecEsp = calcularFrecuenciaEsperada(probabilidad);
-            double estadistico = estadisticoPrueba(matriz[i][2], frecEsp, i);
+            double estadistico = estadisticoPrueba(matriz[i][2], frecEsp);
             tm.addRow(new Object[]
             {
-                in.format(matriz[i][0]), in.format(matriz[i][1]), matriz[i][2], c.format(probabilidad), c.format(frecEsp) , c.format(estadistico)
+                in.format(matriz[i][0]),
+                in.format(matriz[i][1]),
+                matriz[i][2], 
+                c.format(probabilidad),
+                c.format(frecEsp),
+                c.format(estadistico)
             });
         }
         
         agregarTablaAcumulada();
         
-
-//        if (frecEsp < 5) {
-//            int frecuenciaAcumulada=0;
-//            int frecObsAcumulada=0;
-//            int a= (int) tm.getValueAt(0, 3)+(int) tm.getValueAt(1, 3);
-//            int inicio = 0;
-//            for (int i = 0; i <= tm.getRowCount(); i++) {
-//                frecuenciaAcumulada += (int) tm.getValueAt(i, 3);
-//                frecObsAcumulada += matriz[i][2];
-//                if (frecuenciaAcumulada >= 5) {
-//                 tm2.addRow(new Object[]{matriz[inicio][0] + " - " + matriz[i][1], frecObsAcumulada, frecuenciaAcumulada, estadisticoPrueba(frecObsAcumulada, (int)frecuenciaAcumulada,i)});
-//                    inicio = i+1;
-//                    frecuenciaAcumulada =0;
-//                    frecObsAcumulada =0;
-//                    break;
-//                }
-//                
-//                if (frecSumaEsp < 5) {
-//                    if (i == tm.getRowCount())//significa que termino de buscar en las filas y aun la fe es menor a 5
-//                    {
-//                        int valorE = (int) tm2.getValueAt((tm2.getRowCount() - 1), 2);
-//                        int valorO = (int) tm2.getValueAt((tm2.getRowCount() - 1), 1);
-//
-//                        valorE += frecSumaEsp;
-//                        valorO += frecSumaObservadas;
-//
-//                        tm2.setValueAt(valorE, (tm2.getRowCount() - 1), 2);
-//                        tm2.setValueAt(valorO, (tm2.getRowCount() - 1), 1);
-//
-//                        double desde = 0;
-//                        desde = r[tm2.getRowCount() - 1][0];
-//                        tm2.setValueAt(in.format(desde) + " - 1,00", (tm2.getRowCount() - 1), 0);
-//
-//                        double estadis = (double) Math.pow((valorE - valorO), 2) / valorE;
-//                        tm2.setValueAt(estadis, (tm2.getRowCount() - 1), 3);
-//
-//                        break;
-//                    }
-//                    frecSumaEsp += (int) tm.getValueAt(i, 3);
-//                    frecSumaObservadas += (int) tm.getValueAt(i, 2);
-//                    vueltas++;
-//            }
-            //else {
-//                    rangoM = 0;
-//                    for (int j = 0; j < vueltas-1; j++) {
-//                        rangoM += rango;
-//                    }
-//                   
-
-            // do{
-//                        if(contAux == 0){
-//                            
-//                            contAux++;
-//                            ultimoValor = vueltas;
-//                            
-//                            r[0][0] = 0.0;
-//                           // r[0][1] = rangoM;
-//                            double estadisticoParcial=(double)(Math.pow((frecSumaObservadas-frecSumaEsp),2))/frecSumaEsp;
-//                            tm2.addRow(new Object[]{"0.00 - "+ in.format(rangoM), frecSumaObservadas, frecSumaEsp, c.format(estadisticoParcial)});
-//                            estadisticoTotal += estadisticoParcial;
-//                            frecSumaEsp = 0;
-//                            frecSumaObservadas = 0;
-//                            i = i-1;
-//                            end = true;
-//                        }
-//                        else if(contAux != 0){
-//                            double rangoM2 = r[contAux-1][1];
-//                            double estadisticoParcial=(double)(Math.pow((frecSumaObservadas-frecSumaEsp),2))/frecSumaEsp;
-//                            estadisticoTotal += estadisticoParcial;
-//                            tm2.addRow(new Object[]{in.format(rangoM2)+" - "+ in.format(rangoM), frecSumaObservadas, frecSumaEsp, c.format(estadisticoParcial)});
-//                            
-//                            r[contAux][0]=rangoM2;
-//                           // r[contAux][1]=rangoM;
-//                            
-//                            ultimoValor = vueltas-1;
-//                            frecSumaEsp = 0;
-//                            frecSumaObservadas = 0;
-//                            contAux++;
-//                            if(i==tm.getRowCount()){
-//                                end = true;
-//                            }
-//                            else{
-//                                i = i-1;
-//                                end = true;
-//                            }
-//                        }
-//                    }while(end != true);
-            // }
-            // }
-//        }
-
         String valoresGenerados = valoresGenerados(values);
         txt_valoresGenerados.setText(valoresGenerados);
 
-        DefaultTableModel tm2 = (DefaultTableModel) _tablaAcumulada.getModel();
-        _gradosLib_agrupado.setText("" + gradosLibertad(tm2.getRowCount()));
-        txt_nuevo_estadistico.setText("" + c.format(estadisticoTotalAcumulado()));
-
         //para el calculo de mi estadistico de prueba total
         txt_estadistico.setText("" + c.format(estadisticoPruebaTotal()));
-        txt_grados.setText("" + gradosLibertad(intervalos));
+        txt_grados.setText("" + gradosLibertad(cantIntervalos));
 
         //     valoresGenerados = vec;
-//      //  agregarHistograma();
+        agregarHistograma(values);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         this.setVisible(true);
     }
 
-    public double estadisticoPrueba(float frecObs, float frecEsp, int loop) {
+    public double estadisticoPrueba(float frecObs, float frecEsp) {
        return (double) (Math.pow(frecObs - frecEsp, 2)) / frecEsp;
     }
 
-    public int gradosLibertad(int intervalo) {
-        return intervalo - 0 - 1;
+    public int gradosLibertad(int intervalos) {
+        //Restamos uno por definicion
+        // y uno mas por el parametro de la media
+        return intervalos - 1 - 1;
     }
 
     public double estadisticoPruebaTotal() {
@@ -303,7 +217,7 @@ public class ExponencialTestTable extends javax.swing.JFrame {
         _tablaAcumulada.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][]
             {
-                {null, null, null, null, null, null}
+
             },
             new String []
             {
@@ -440,18 +354,19 @@ public class ExponencialTestTable extends javax.swing.JFrame {
     private javax.swing.JTextArea txt_valoresGenerados;
     // End of variables declaration//GEN-END:variables
 
-    private void agregarHistograma() {
+    private void agregarHistograma(float[] valoresGenerados) {
         // Tenemos que convertir los numeros generados a un vector de double.
-        double[] valoresGeneradosEnDouble = obtenerValoresEnDouble();
-        //Histograma histograma = new Histograma("Frecuencia de numeros random Java",
-//                "Histograma del Random de Java", valoresGeneradosEnDouble, cantIntervalos);
-//        JPanel histoPanel = histograma.obtenerPanel();
-//        histoPanel.setVisible(true);
-//        panelHistograma.add(histoPanel);
-//        panelHistograma.validate();
+        double[] valoresGeneradosEnDouble = obtenerValoresEnDouble(valoresGenerados);
+        Histograma histograma = new Histograma("Histograma Distribucion Exponencial",
+                "Frecuencia de numeros aleatorios", valoresGeneradosEnDouble,
+                cantIntervalos, (double) minimo, (double) maximo);
+        JPanel histoPanel = histograma.obtenerPanel();
+        histoPanel.setVisible(true);
+        panelHistograma.add(histoPanel);
+        panelHistograma.validate();
     }
 
-    private double[] obtenerValoresEnDouble() {
+    private double[] obtenerValoresEnDouble(float[] valoresGenerados) {
         double[] ret = new double[valoresGenerados.length];
         for (int i = 0; i < valoresGenerados.length; i++) {
             ret[i] = (double) valoresGenerados[i];
@@ -462,7 +377,6 @@ public class ExponencialTestTable extends javax.swing.JFrame {
     private float calcularRango(float[] values, int cantIntervalos) {
         Calculator.quicksort(values, 0, values.length-1);
         minimo = (float) Math.floor(values[0]);
-//        minimo = values[0];
         maximo = (float) Math.ceil(values[values.length-1]);
         return (maximo - minimo) / cantIntervalos;
     }
@@ -479,11 +393,9 @@ public class ExponencialTestTable extends javax.swing.JFrame {
 
     private float calcularProbabilidad(float limiteInferior, float limiteSuperior)
     {
-        float res = 0.0f;
         float expInferior = (float) (1 - (Math.exp((-lambda * limiteInferior))));
         float expSuperior = (float) (1 - (Math.exp((-lambda * limiteSuperior))));
-        res = expSuperior - expInferior;
-        return res;
+        return expSuperior - expInferior;
     }
 
     private float calcularFrecuenciaEsperada(float probabilidad)
@@ -495,8 +407,95 @@ public class ExponencialTestTable extends javax.swing.JFrame {
     {
         if (algunaFrecuenciaEsperadaMenorA5())
         {
-            DefaultTableModel tm2 = (DefaultTableModel) _tablaAcumulada.getModel();
+            DefaultTableModel tmAgrupado = (DefaultTableModel) _tablaAcumulada.getModel();
+            TableModel tmOriginal = (DefaultTableModel) _tabla.getModel();
             
+            DecimalFormat c = new DecimalFormat("0.000");
+            
+            float frecEspAcumulada = 0;
+            float frecEsperadaActual = 0;
+            float frecObsAcumulada = 0;
+            float frecObsActual = 0;
+            int filaInicioActual = 0;
+            float estadisticoTotal = 0;
+
+            for (int i = 0; i < tmOriginal.getRowCount(); i++) 
+            {
+                if (tmOriginal.getValueAt(i, COL_FREC_ESP) instanceof String)
+                {
+                    String frecEsperada = (String) tmOriginal.getValueAt(i, COL_FREC_ESP);
+                    if (frecEsperada.indexOf(',') > 0)
+                    {
+                        frecEsperadaActual = Float.parseFloat(frecEsperada.replace(',', '.'));
+                    }
+                    else
+                    {
+                        frecEsperadaActual = Float.parseFloat(frecEsperada);
+                    }
+                }
+                
+                frecEspAcumulada += frecEsperadaActual;
+                
+                if (tmOriginal.getValueAt(i, COL_FREC_OBS) instanceof Float)
+                {
+                    frecObsActual = (float) tmOriginal.getValueAt(i, COL_FREC_OBS);
+                }
+                else
+                {
+                    throw new NullPointerException("La frecuencia Observada no era FLOAT!!!");
+                }
+                
+                frecObsAcumulada += frecObsActual;
+                
+                if (frecEspAcumulada >= 5) 
+                {
+                    double estadisticoPruebaAcumActual = estadisticoPrueba(frecObsAcumulada, frecEspAcumulada);
+                    estadisticoTotal += estadisticoPruebaAcumActual;
+                    //poner Probabilidad a N/A xq no se usa aca
+                    tmAgrupado.addRow(new Object[]{tmOriginal.getValueAt(filaInicioActual, COL_DESDE), 
+                        tmOriginal.getValueAt(i, COL_HASTA), 
+                        frecObsAcumulada,
+                        "N/A",
+                        frecEspAcumulada,
+                        c.format(estadisticoPruebaAcumActual)});
+                    
+                    filaInicioActual = i + 1;
+                    frecEspAcumulada = 0;
+                    frecObsAcumulada = 0;
+                } 
+                else // siguiente vuelta y no suma 5, le appendeo lo acumulado a la ultima fila que armé
+                {
+                    
+                    int filaAUnir = tmAgrupado.getRowCount() - 1;
+                    //actualizo intervalo (HASTA)
+                    tmAgrupado.setValueAt(tmOriginal.getValueAt(i, COL_HASTA), filaAUnir, COL_HASTA);
+                    //frec observada
+
+                    tmAgrupado.setValueAt(frecObsAcumulada + obtenerValorEnFloat(tmAgrupado.getValueAt(filaAUnir, COL_FREC_OBS)), filaAUnir, COL_FREC_OBS);
+                    //frec esperada
+                    tmAgrupado.setValueAt(frecEspAcumulada + obtenerValorEnFloat(tmAgrupado.getValueAt(filaAUnir, COL_FREC_ESP)), filaAUnir, COL_FREC_ESP);
+
+                    frecObsActual = (float) tmAgrupado.getValueAt(filaAUnir, COL_FREC_OBS);
+                    frecEsperadaActual = (float) tmAgrupado.getValueAt(filaAUnir, COL_FREC_ESP);
+
+                    double estadistico = estadisticoPrueba(frecObsActual, frecEsperadaActual);
+                    tmAgrupado.setValueAt(c.format(estadistico), filaAUnir, COL_ESTAD);
+                    estadisticoTotal += estadistico;
+
+                    if (i == tmOriginal.getRowCount() - 1)
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        filaInicioActual = i + 1;
+                        frecEspAcumulada = 0;
+                        frecObsAcumulada = 0;
+                    }
+                }
+            }
+            _gradosLib_agrupado.setText("" + gradosLibertad(tmAgrupado.getRowCount()));
+            txt_nuevo_estadistico.setText("" + c.format(estadisticoTotal));
         }
         
         
@@ -511,9 +510,9 @@ public class ExponencialTestTable extends javax.swing.JFrame {
         for (int i = 0; i < tmOriginal.getRowCount(); i++)
         {
             Double frecEsperada = 0.0;
-            if (tmOriginal.getValueAt(i, 5) instanceof String)
+            if (tmOriginal.getValueAt(i, COL_FREC_ESP) instanceof String)
             {
-                String estadStr = (String) tmOriginal.getValueAt(i, 5);
+                String estadStr = (String) tmOriginal.getValueAt(i, COL_FREC_ESP);
                 if (estadStr.indexOf(',') > 0)
                 {
                     frecEsperada = Double.parseDouble(estadStr.replace(',', '.'));
@@ -531,8 +530,25 @@ public class ExponencialTestTable extends javax.swing.JFrame {
         return rv;
     }
 
-    private Object estadisticoTotalAcumulado()
+    private float obtenerValorEnFloat(Object valueAt)
     {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        float toReturn = 0;
+        if (valueAt instanceof String)
+        {
+            String val = (String) valueAt;
+            if (val.indexOf(',') > 0)
+            {
+                toReturn = Float.parseFloat(val.replace(',', '.'));
+            }
+            else
+            {
+                toReturn = Float.parseFloat(val);
+            }
+        }
+        else if (valueAt instanceof Float)
+        {
+            toReturn = (Float) valueAt;
+        }
+        return toReturn;
     }
 }

@@ -109,7 +109,7 @@ public class Calculator {
         
     }
         
-     public float[][] matrizFrecuenciaExponencial(float valores[], float rango, int intervalos, float minimo)
+     public static float[][] matrizFrecuenciaExponencial(float valores[], float rango, int intervalos, float minimo)
     {
         //Se arranca con el extremo minimo y vamos agregando el rango definido a cada intervalo
         float[][] vectorFrecuencias = armadoRangosExponencial(minimo, rango, intervalos);
@@ -133,7 +133,7 @@ public class Calculator {
         return vectorFrecuencias;
     }
 
-    private float[][] armadoRangosExponencial(float minimo, float rango, int intervalos)
+    private static float[][] armadoRangosExponencial(float minimo, float rango, int intervalos)
     {
         float[][] vectorFrecuencias = new float[intervalos][3];
         //  [0] es el limite inferior del intervalo
