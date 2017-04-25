@@ -201,4 +201,124 @@ public class Calculator {
         }
         return vectorFrecuencias;
     }
+    
+    
+    public static float[] calcularPoisson(Poisson distribucion, int size)
+    {
+        Random random = new Random();
+        float[] vec = new float[size];
+        float p = 0, randomValue = 0;;
+        int x = 0;
+
+        double a = (double) Math.exp(((distribucion.getMedia()) * -1));
+
+        for (int i = 0; i < size; i++)
+        {
+            p = 1;
+            x = -1;
+            do
+            {
+                randomValue = random.nextFloat();
+                p = p * randomValue;
+                x = x + 1;
+            }
+            while (p >= a);
+            vec[i] = x;
+        }
+
+        return vec;
+    }
+    
+    public static float[][] matrizFrecuenciaPoisson(float valores[], int intervalo)
+    {
+        float[] vec = valores;
+        float min = 0, max = 0;
+
+        for (int i = 0; i < vec.length; i++)
+        {
+            if (vec[i] > max)
+            {
+                max = vec[i];
+            }
+        }
+        for (int i = 0; i < vec.length; i++)
+        {
+            if (i == 0)
+            {
+                min = vec[i];
+            }
+            else
+            {
+                if (vec[i] < min)
+                {
+                    min = vec[i];
+                }
+            }
+        }
+
+        int rango = (int) (max - min) / intervalo;
+        rango++;
+        float[][] m = new float[intervalo][3];
+        //  [0] es el limite inferior del intervalo
+        //  [1] es el limite superior del intervalo
+        //  [2] es la frecuencia del intervalo
+        for (int i = 0; i < intervalo; i++)
+        {
+            if (i == 0)
+            {
+                m[0][0] = min;
+                m[0][1] = min + rango - 1;
+            }
+            else
+            {
+                float aux = m[i - 1][1];
+                m[i][0] = aux + 1;
+                m[i][1] = aux + rango;
+            }
+        }
+
+        for (int i = 0; i < vec.length; i++)
+        {
+            for (int j = 0; j < intervalo; j++)
+            {
+                if (vec[i] <= m[j][1])
+                {
+                    m[j][2]++;
+                    break;
+                }
+            }
+        }
+
+        return m;
+    }
+
+    public static int rangoPoisson(float[] vec, int intervalo)
+    {
+        float max = 0, min = 0;
+        for (int i = 0; i < vec.length; i++)
+        {
+            if (vec[i] > max)
+            {
+                max = vec[i];
+            }
+        }
+        for (int i = 0; i < vec.length; i++)
+        {
+            if (i == 0)
+            {
+                min = vec[i];
+            }
+            else
+            {
+                if (vec[i] < min)
+                {
+                    min = vec[i];
+                }
+            }
+        }
+
+        int rango = (int) (max - min) / intervalo;
+        rango++;
+        return rango;
+    }
 }

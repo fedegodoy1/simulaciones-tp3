@@ -1,6 +1,7 @@
 package front;
 
 import front.exponencial.*;
+import front.poisson.*;
 import java.text.DecimalFormat;
 import javax.swing.table.DefaultTableModel;
 import objects.Controller;
@@ -240,6 +241,15 @@ public class GeneratorTable extends javax.swing.JFrame {
                 {
                     new NormalTestTable(this, controller, valores, datos, 
                             Integer.parseInt((String) cmb_intervalo.getSelectedItem())).setVisible(true);
+                });
+                break;
+            }
+            case Controller.POISSON:
+            {
+                btn_ejecutar.addActionListener((ae) ->
+                {
+                    new PoissonTestTable(this, controller, valores, datos,
+                                         Integer.parseInt((String) cmb_intervalo.getSelectedItem())).setVisible(true);
                 });
                 break;
             }
