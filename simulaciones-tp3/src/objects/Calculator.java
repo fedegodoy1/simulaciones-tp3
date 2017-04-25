@@ -5,7 +5,7 @@
  */
 package objects;
 
-import static java.lang.Math.random;
+import static java.lang.Math.*;
 import java.util.Random;
 
 public class Calculator {
@@ -24,20 +24,69 @@ public class Calculator {
         
         return vec;
     }
+    
     public static float[] calculatorNormal(int size, Normal distribucion){
         Random random = new Random();
         float[] vec = new float[size];
         float z = 0, randomValue=0, sumaRandom=0, acum=0;
         
-        for (int i = 0; i < size; i++) {
+        for (int i = 0; i < size; i++) 
+        {
             acum = 0;
-            for (int j = 0; j < vec.length; j++) {
+            for (int j = 0; j < vec.length; j++) 
+            {
                 acum += random.nextFloat();
             }
             z = ((acum-6)*(float)distribucion.getDesviacionEstandar()) + (float)distribucion.getMedia();
             vec[i]=z;
         }
         return vec;
+    }
+    
+    public static float[] calculatorNormalBoxMuller(int size, Normal distribucion)
+    {
+        Random random = new Random();
+        float[] vec = new float[size];
+        float rnd1, rnd2;
+        boolean yaAgregueElSegundo = false;
+        
+        for ( int i = 0; i < size ; i++)
+        {
+            if (yaAgregueElSegundo)
+            {
+                yaAgregueElSegundo = false;
+                continue;
+            }
+            rnd1 = random.nextFloat();
+            rnd2 = random.nextFloat();
+            
+            vec[i] = n1(rnd1,rnd2, distribucion);
+            if (i +1 < size)
+            {
+                vec [i + 1] = n2(rnd1,rnd2, distribucion);
+                yaAgregueElSegundo = true;
+            }
+        }
+        
+        return vec;
+    }
+
+    private static float n1(float rnd1, float rnd2, Normal distribucion)
+    {
+        float n1 = 0;
+        double raiz = sqrt((-2)* log(rnd1));
+        double coseno = cos(2*PI*rnd2);
+        n1 = (float) ((raiz * coseno) * distribucion.getDesviacionEstandar() + distribucion.getMedia());
+        return n1;
+    }
+
+    private static float n2(float rnd1, float rnd2, Normal distribucion)
+    {
+        float n2 = 0;
+        double raiz = sqrt((-2)* log(rnd1));
+        double seno = sin(2*PI*rnd2);
+        n2 = (float) ((raiz * seno) * distribucion.getDesviacionEstandar() + distribucion.getMedia());
+        return n2;
     }
     
      public float[][][] matrizFrecuenciaUniforme(Uniforme uniforme, float rango, int intervalos){

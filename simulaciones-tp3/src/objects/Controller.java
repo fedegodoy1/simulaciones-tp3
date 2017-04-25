@@ -117,7 +117,7 @@ public class Controller {
     {
         Normal n = new Normal(media,desviacion);
         
-        float[] vec = Calculator.calculatorNormal(size,n);
+        float[] vec = Calculator.calculatorNormalBoxMuller(size,n);
         String[] datosUsados = new String[3];
         datosUsados[0] = ""+size;
         datosUsados[1] = ""+media;
