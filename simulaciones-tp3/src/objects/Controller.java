@@ -140,6 +140,6 @@ public class Controller {
 
     private void crearGeneradorNormal()
     {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        generator = new NormalGenerator(this);
     }
 }

@@ -36,7 +36,7 @@ public class GeneratorTable extends javax.swing.JFrame {
         }
         txt_media.setText(""+datos[1]);
         txt_cantNum.setText(""+datos[0]);
-        if(controller.getTipo() == "normal"){
+        if(controller.getTipo() == Controller.NORMAL){
             txt_desviacion.setText(""+datos[2]);
         }
         
@@ -230,6 +230,14 @@ public class GeneratorTable extends javax.swing.JFrame {
                 btn_ejecutar.addActionListener((ae) -> 
                 {
                     new ExponencialTestTable(this, controller, valores, datos,
+                            Integer.parseInt((String) cmb_intervalo.getSelectedItem())).setVisible(true);
+                });
+            }
+            case Controller.NORMAL:
+            {
+                btn_ejecutar.addActionListener((ae) ->
+                {
+                    new NormalTestTable(this, controller, valores, datos, 
                             Integer.parseInt((String) cmb_intervalo.getSelectedItem())).setVisible(true);
                 });
             }
