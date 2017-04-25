@@ -10,7 +10,6 @@ import javax.swing.*;
 import javax.swing.table.*;
 import jfree.*;
 import objects.*;
-import front.*;
 
 /**
  *
@@ -463,7 +462,8 @@ public class ExponencialTestTable extends javax.swing.JFrame {
                     frecEspAcumulada = 0;
                     frecObsAcumulada = 0;
                 } 
-                else // siguiente vuelta y no suma 5, le appendeo lo acumulado a la ultima fila que armé
+                else if (i == tmOriginal.getRowCount() - 1)
+                        // siguiente vuelta y no suma 5, le appendeo lo acumulado a la ultima fila que armé
                 {
                     
                     int filaAUnir = tmAgrupado.getRowCount() - 1;
@@ -478,20 +478,14 @@ public class ExponencialTestTable extends javax.swing.JFrame {
                     frecObsActual = (float) tmAgrupado.getValueAt(filaAUnir, COL_FREC_OBS);
                     frecEsperadaActual = (float) tmAgrupado.getValueAt(filaAUnir, COL_FREC_ESP);
 
+                    
+                    estadisticoTotal -= obtenerValorEnFloat(tmAgrupado.getValueAt((tmAgrupado.getRowCount() - 1), COL_ESTAD));
+                    
                     double estadistico = estadisticoPrueba(frecObsActual, frecEsperadaActual);
                     tmAgrupado.setValueAt(c.format(estadistico), filaAUnir, COL_ESTAD);
                     estadisticoTotal += estadistico;
 
-                    if (i == tmOriginal.getRowCount() - 1)
-                    {
-                        break;
-                    }
-                    else
-                    {
-                        filaInicioActual = i + 1;
-                        frecEspAcumulada = 0;
-                        frecObsAcumulada = 0;
-                    }
+                    break;
                 }
             }
             _gradosLib_agrupado.setText("" + gradosLibertad(tmAgrupado.getRowCount()));
