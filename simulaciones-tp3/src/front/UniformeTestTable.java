@@ -356,7 +356,7 @@ public class UniformeTestTable extends javax.swing.JFrame {
     private void agregarHistograma(int cantIntervalos, Uniforme uniformeValues) {
         // Tenemos que convertir los numeros generados a un vector de double.
         Histograma histograma = new Histograma("Frecuencia de numeros random Java",
-        "Histograma del Random de Java", obtenerValoresEnDouble(uniformeValues), cantIntervalos);
+        "Histograma del Random de Java", obtenerValoresEnDouble(uniformeValues), cantIntervalos, uniformeValues.getDesde(), uniformeValues.getHasta());
         JPanel histoPanel = histograma.obtenerPanel();
         histoPanel.setVisible(true);
         panelHistograma.add(histoPanel);
