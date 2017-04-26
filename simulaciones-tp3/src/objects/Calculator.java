@@ -5,7 +5,7 @@
  */
 package objects;
 
-import static java.lang.Math.random;
+import static java.lang.Math.*;
 import java.util.Random;
 
 public class Calculator {
@@ -24,20 +24,69 @@ public class Calculator {
         
         return vec;
     }
+    
     public static float[] calculatorNormal(int size, Normal distribucion){
         Random random = new Random();
         float[] vec = new float[size];
         float z = 0, randomValue=0, sumaRandom=0, acum=0;
         
-        for (int i = 0; i < size; i++) {
+        for (int i = 0; i < size; i++) 
+        {
             acum = 0;
-            for (int j = 0; j < vec.length; j++) {
+            for (int j = 0; j < vec.length; j++) 
+            {
                 acum += random.nextFloat();
             }
             z = ((acum-6)*(float)distribucion.getDesviacionEstandar()) + (float)distribucion.getMedia();
             vec[i]=z;
         }
         return vec;
+    }
+    
+    public static float[] calculatorNormalBoxMuller(int size, Normal distribucion)
+    {
+        Random random = new Random();
+        float[] vec = new float[size];
+        float rnd1, rnd2;
+        boolean yaAgregueElSegundo = false;
+        
+        for ( int i = 0; i < size ; i++)
+        {
+            if (yaAgregueElSegundo)
+            {
+                yaAgregueElSegundo = false;
+                continue;
+            }
+            rnd1 = random.nextFloat();
+            rnd2 = random.nextFloat();
+            
+            vec[i] = n1(rnd1,rnd2, distribucion);
+            if (i +1 < size)
+            {
+                vec [i + 1] = n2(rnd1,rnd2, distribucion);
+                yaAgregueElSegundo = true;
+            }
+        }
+        
+        return vec;
+    }
+
+    private static float n1(float rnd1, float rnd2, Normal distribucion)
+    {
+        float n1 = 0;
+        double raiz = sqrt((-2)* log(rnd1));
+        double coseno = cos(2*PI*rnd2);
+        n1 = (float) ((raiz * coseno) * distribucion.getDesviacionEstandar() + distribucion.getMedia());
+        return n1;
+    }
+
+    private static float n2(float rnd1, float rnd2, Normal distribucion)
+    {
+        float n2 = 0;
+        double raiz = sqrt((-2)* log(rnd1));
+        double seno = sin(2*PI*rnd2);
+        n2 = (float) ((raiz * seno) * distribucion.getDesviacionEstandar() + distribucion.getMedia());
+        return n2;
     }
     
      public float[][][] matrizFrecuenciaUniforme(Uniforme uniforme, float rango, int intervalos){
@@ -151,5 +200,147 @@ public class Calculator {
             hasta += rango;
         }
         return vectorFrecuencias;
+    }
+    
+    
+    public static float[] calcularPoisson(Poisson distribucion, int size)
+    {
+        Random random = new Random();
+        float[] vec = new float[size];
+        float p = 0, randomValue = 0;;
+        int x = 0;
+
+        double a = (double) Math.exp(((distribucion.getMedia()) * -1));
+
+        for (int i = 0; i < size; i++)
+        {
+            p = 1;
+            x = -1;
+            do
+            {
+                randomValue = random.nextFloat();
+                p = p * randomValue;
+                x = x + 1;
+            }
+            while (p >= a);
+            vec[i] = x;
+        }
+
+        return vec;
+    }
+    
+    public static float[][] matrizFrecuenciaPoisson(float valores[], int intervalo)
+    {
+        float[] vec = valores;
+        float min = 0, max = 0;
+
+        for (int i = 0; i < vec.length; i++)
+        {
+            if (vec[i] > max)
+            {
+                max = vec[i];
+            }
+        }
+        for (int i = 0; i < vec.length; i++)
+        {
+            if (i == 0)
+            {
+                min = vec[i];
+            }
+            else
+            {
+                if (vec[i] < min)
+                {
+                    min = vec[i];
+                }
+            }
+        }
+
+        int rango = (int) (max - min) / intervalo;
+        rango++;
+        float[][] m = new float[intervalo][3];
+        //  [0] es el limite inferior del intervalo
+        //  [1] es el limite superior del intervalo
+        //  [2] es la frecuencia del intervalo
+        for (int i = 0; i < intervalo; i++)
+        {
+            if (i == 0)
+            {
+                m[0][0] = min;
+                m[0][1] = min + rango - 1;
+            }
+            else
+            {
+                float aux = m[i - 1][1];
+                m[i][0] = aux + 1;
+                m[i][1] = aux + rango;
+            }
+        }
+
+        for (int i = 0; i < vec.length; i++)
+        {
+            for (int j = 0; j < intervalo; j++)
+            {
+                if (vec[i] <= m[j][1])
+                {
+                    m[j][2]++;
+                    break;
+                }
+            }
+        }
+
+        return m;
+    }
+
+    public static int rangoPoisson(float[] vec, int intervalo)
+    {
+        float max = 0, min = 0;
+        for (int i = 0; i < vec.length; i++)
+        {
+            if (vec[i] > max)
+            {
+                max = vec[i];
+            }
+        }
+        for (int i = 0; i < vec.length; i++)
+        {
+            if (i == 0)
+            {
+                min = vec[i];
+            }
+            else
+            {
+                if (vec[i] < min)
+                {
+                    min = vec[i];
+                }
+            }
+        }
+
+        int rango = (int) (max - min) / intervalo;
+        rango++;
+        return rango;
+    }
+    
+    public static float obtenerValorEnFloat(Object valueAt)
+    {
+        float toReturn = 0;
+        if (valueAt instanceof String)
+        {
+            String val = (String) valueAt;
+            if (val.indexOf(',') > 0)
+            {
+                toReturn = Float.parseFloat(val.replace(',', '.'));
+            }
+            else
+            {
+                toReturn = Float.parseFloat(val);
+            }
+        }
+        else if (valueAt instanceof Float)
+        {
+            toReturn = (Float) valueAt;
+        }
+        return toReturn;
     }
 }

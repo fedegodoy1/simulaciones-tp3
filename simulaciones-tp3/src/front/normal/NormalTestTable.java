@@ -31,7 +31,7 @@ public class NormalTestTable extends javax.swing.JFrame {
 
     private final float media;
 
-    private final float lambda;
+    private final float desviacion;
     
     private int cantIntervalos;
 
@@ -45,7 +45,7 @@ public class NormalTestTable extends javax.swing.JFrame {
         float[][] matriz = Calculator.matrizFrecuenciaExponencial(ordenadosValues, rango, cantIntervalos, minimo);
         N = Integer.parseInt(datos[0]);
         media = Float.parseFloat(datos[1]);
-        lambda = (float) 1/media;
+        desviacion = Float.parseFloat(datos[2]);
         
 
         initComponents();
@@ -356,7 +356,7 @@ public class NormalTestTable extends javax.swing.JFrame {
     private void agregarHistograma(float[] valoresGenerados) {
         // Tenemos que convertir los numeros generados a un vector de double.
         double[] valoresGeneradosEnDouble = obtenerValoresEnDouble(valoresGenerados);
-        Histograma histograma = new Histograma("Histograma Distribucion Exponencial",
+        Histograma histograma = new Histograma("Histograma Distribucion Normal",
                 "Frecuencia de numeros aleatorios", valoresGeneradosEnDouble,
                 cantIntervalos, (double) minimo, (double) maximo);
         JPanel histoPanel = histograma.obtenerPanel();
@@ -392,9 +392,14 @@ public class NormalTestTable extends javax.swing.JFrame {
 
     private float calcularProbabilidad(float limiteInferior, float limiteSuperior)
     {
-        float expInferior = (float) (1 - (Math.exp((-lambda * limiteInferior))));
-        float expSuperior = (float) (1 - (Math.exp((-lambda * limiteSuperior))));
-        return expSuperior - expInferior;
+        //G4 = desde + hasta / 2
+        //=EXP((-1/2)*(((G4-MediaN)/Desv)^2))/(Desv*SQRTPI(2))
+        float marcaDeClase = (limiteInferior + limiteSuperior) / 2;
+        double exponente = (-0.5) * (Math.pow(((marcaDeClase - media)/ desviacion), 2));
+        double denominador = desviacion * Math.sqrt(2*Math.PI);
+//        float expInferior = (float) (1 - (Math.exp((-lambda * limiteInferior))));
+//        float expSuperior = (float) (1 - (Math.exp((-lambda * limiteSuperior))));
+        return (float) (Math.exp(exponente) / denominador);
     }
 
     private float calcularFrecuenciaEsperada(float probabilidad)
@@ -462,7 +467,7 @@ public class NormalTestTable extends javax.swing.JFrame {
                     frecEspAcumulada = 0;
                     frecObsAcumulada = 0;
                 } 
-                else if (i == tmOriginal.getRowCount() - 1)
+                else if (i == tmOriginal.getRowCount() - 1 && tmAgrupado.getRowCount() > 0)
                         // siguiente vuelta y no suma 5, le appendeo lo acumulado a la ultima fila que armé
                 {
                     
@@ -486,6 +491,20 @@ public class NormalTestTable extends javax.swing.JFrame {
                     estadisticoTotal += estadistico;
 
                     break;
+                }
+                else if (i == tmOriginal.getRowCount() - 1 && tmAgrupado.getRowCount() <= 0)
+                {
+                    //Esto significa q no hay como actualizar xq la tabla nunca tuvo ninguna fila, asiq agregarla es la opcion.
+                    
+                    double estadisticoPruebaAcumActual = estadisticoPrueba(frecObsAcumulada, frecEspAcumulada);
+                    estadisticoTotal += estadisticoPruebaAcumActual;
+                    //poner Probabilidad a N/A xq no se usa aca
+                    tmAgrupado.addRow(new Object[]{tmOriginal.getValueAt(filaInicioActual, COL_DESDE), 
+                        tmOriginal.getValueAt(i, COL_HASTA), 
+                        frecObsAcumulada,
+                        "N/A",
+                        frecEspAcumulada,
+                        c.format(estadisticoPruebaAcumActual)});
                 }
             }
             _gradosLib_agrupado.setText("" + gradosLibertad(tmAgrupado.getRowCount()));

@@ -8,7 +8,7 @@ package objects;
 import java.util.Random;
 import front.*;
 import front.exponencial.*;
-import objects.Uniforme;
+import front.poisson.*;
 /**
  *
  * @author federico
@@ -117,7 +117,7 @@ public class Controller {
     {
         Normal n = new Normal(media,desviacion);
         
-        float[] vec = Calculator.calculatorNormal(size,n);
+        float[] vec = Calculator.calculatorNormalBoxMuller(size,n);
         String[] datosUsados = new String[3];
         datosUsados[0] = ""+size;
         datosUsados[1] = ""+media;
@@ -135,11 +135,24 @@ public class Controller {
 
     private void crearGeneradorPoisson()
     {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        generator = new PoissonGenerator(this);
     }
 
     private void crearGeneradorNormal()
     {
         generator = new NormalGenerator(this);
+    }
+    
+     public void randomFloatPoisson(int size, float media)
+    {
+        Poisson p = new Poisson(media);
+        float[] vec = Calculator.calcularPoisson(p, size);
+        String[] datosUsados = new String[3];
+        datosUsados[0] = "" + size;
+        datosUsados[1] = "" + media;
+
+        GeneratorTable po = new GeneratorTable(this, vec, "Poisson", datosUsados);
+        po.setVisible(true);
+        generator.setVisible(false);
     }
 }
