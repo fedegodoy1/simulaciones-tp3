@@ -321,4 +321,26 @@ public class Calculator {
         rango++;
         return rango;
     }
+    
+    public static float obtenerValorEnFloat(Object valueAt)
+    {
+        float toReturn = 0;
+        if (valueAt instanceof String)
+        {
+            String val = (String) valueAt;
+            if (val.indexOf(',') > 0)
+            {
+                toReturn = Float.parseFloat(val.replace(',', '.'));
+            }
+            else
+            {
+                toReturn = Float.parseFloat(val);
+            }
+        }
+        else if (valueAt instanceof Float)
+        {
+            toReturn = (Float) valueAt;
+        }
+        return toReturn;
+    }
 }

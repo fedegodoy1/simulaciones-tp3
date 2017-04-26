@@ -5,11 +5,10 @@
  */
 package front.poisson;
 
-import java.text.DecimalFormat;
-import javax.swing.JFrame;
-import javax.swing.table.DefaultTableModel;
-import objects.Calculator;
-import objects.Controller;
+import java.text.*;
+import javax.swing.*;
+import javax.swing.table.*;
+import objects.*;
 
 /**
  *
@@ -18,10 +17,27 @@ import objects.Controller;
 public class PoissonTestTable extends javax.swing.JFrame {
 
     Controller controller;
+    float[] valores;
+    int N;
+    float media;
+
+    private final static int COL_DESDE = 0;
+    private final static int COL_HASTA = 1;
+    private final static int COL_FREC_OBS = 2;
+    private final static int COL_PROB = 3;
+    private final static int COL_FREC_ESP = 4;
+    private final static int COL_ESTAD = 5;
+    
+    private final int cantIntervalos;
     
     public PoissonTestTable(JFrame parent, Controller cont, float[] values, String[] datos, int intervalos) {
         
         controller=cont;
+        valores = values;
+        cantIntervalos = intervalos;
+        N = Integer.parseInt(datos[0]);
+        media = Calculator.obtenerValorEnFloat(datos[1]);
+        
         float [][] m = Calculator.matrizFrecuenciaPoisson(values, intervalos);
         initComponents();
         
@@ -38,8 +54,9 @@ public class PoissonTestTable extends javax.swing.JFrame {
             for (int i = 0; i < m.length; i++) {
                 max = m[i][1];
                 prob = 0;
-                for (int j = 0; j < getRango(values,intervalos); j++) {
-                    prob += ((float)Math.pow(Float.parseFloat(datos[1]),max) * (float) Math.exp(Float.parseFloat(datos[1])*-1))/factorial(max);
+                for (int j = 0; j < getRango(values,intervalos); j++) 
+                {
+                    prob += ((float)Math.pow(media,max) * (float) Math.exp(media*-1))/factorial(max);
                     max --;
                 }
                 tm.addRow(new Object[]
@@ -85,6 +102,9 @@ public class PoissonTestTable extends javax.swing.JFrame {
 ////                c.format(estadistico)
 //            });
 //        }
+//        completarFrecuencia();
+//        
+//        agregarAgrupado();
         
         String valoresGenerados = valoresGenerados(values);
         txt_valoresGenerados.setText(valoresGenerados);
@@ -341,4 +361,60 @@ public class PoissonTestTable extends javax.swing.JFrame {
     private javax.swing.JTextField txt_nuevo_estadistico;
     private javax.swing.JTextArea txt_valoresGenerados;
     // End of variables declaration//GEN-END:variables
+
+    private void completarFrecuencia()
+    {
+        
+        DecimalFormat c = new DecimalFormat("0.000");
+        //Iterar la tabla... para cada valor:
+        TableModel tmOriginal = _tabla.getModel();
+        for (int i = 0; i < tmOriginal.getRowCount(); i++)
+        {
+            float frecObs = Calculator.obtenerValorEnFloat(tmOriginal.getValueAt(i, COL_FREC_OBS));
+            float probabilidad = Calculator.obtenerValorEnFloat(tmOriginal.getValueAt(i, COL_PROB));
+            
+            //Fe = ROUND -> P() * N;
+            float frecEsp = Math.round(probabilidad*N);
+       
+            //Estadistico = estadistico( frecObs , frecEsperada)
+            double estadistico = estadistico(frecObs, frecEsp);
+            
+            tmOriginal.setValueAt(frecEsp, i, COL_FREC_ESP);
+            tmOriginal.setValueAt(c.format(estadistico), i, COL_ESTAD);
+        }
+        
+        
+        //Al final
+        //Grados de libertad
+        // Estadistico Total
+        txt_grados.setText(gradosLibertadOriginal());
+        
+        txt_estadistico.setText(estadisticoTotalOriginal(tmOriginal));
+    }
+
+    private void agregarAgrupado()
+    {
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    private double estadistico(float frecuenciaObservada, float frecuenciaEsperada)
+    {
+        
+        return (double) (Math.pow(frecuenciaObservada - frecuenciaEsperada, 2)) / frecuenciaEsperada;
+    }
+
+    private String gradosLibertadOriginal()
+    {
+        return "" + (cantIntervalos - 1 -1);
+    }
+
+    private String estadisticoTotalOriginal(TableModel tmOriginal)
+    {
+        float estadisticoAcumulado = 0;
+        for (int i = 0; i < tmOriginal.getRowCount(); i++)
+        {
+            estadisticoAcumulado += Calculator.obtenerValorEnFloat(tmOriginal.getValueAt(i, COL_ESTAD));
+        }
+        return "" + estadisticoAcumulado;
+    }
 }

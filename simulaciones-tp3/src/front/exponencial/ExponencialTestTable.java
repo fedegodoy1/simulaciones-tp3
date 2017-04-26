@@ -471,15 +471,17 @@ public class ExponencialTestTable extends javax.swing.JFrame {
                     tmAgrupado.setValueAt(tmOriginal.getValueAt(i, COL_HASTA), filaAUnir, COL_HASTA);
                     //frec observada
 
-                    tmAgrupado.setValueAt(frecObsAcumulada + obtenerValorEnFloat(tmAgrupado.getValueAt(filaAUnir, COL_FREC_OBS)), filaAUnir, COL_FREC_OBS);
+                    tmAgrupado.setValueAt(frecObsAcumulada + Calculator.obtenerValorEnFloat(
+                            tmAgrupado.getValueAt(filaAUnir, COL_FREC_OBS)), filaAUnir, COL_FREC_OBS);
                     //frec esperada
-                    tmAgrupado.setValueAt(frecEspAcumulada + obtenerValorEnFloat(tmAgrupado.getValueAt(filaAUnir, COL_FREC_ESP)), filaAUnir, COL_FREC_ESP);
+                    tmAgrupado.setValueAt(frecEspAcumulada + Calculator.obtenerValorEnFloat(
+                            tmAgrupado.getValueAt(filaAUnir, COL_FREC_ESP)), filaAUnir, COL_FREC_ESP);
 
                     frecObsActual = (float) tmAgrupado.getValueAt(filaAUnir, COL_FREC_OBS);
                     frecEsperadaActual = (float) tmAgrupado.getValueAt(filaAUnir, COL_FREC_ESP);
 
                     
-                    estadisticoTotal -= obtenerValorEnFloat(tmAgrupado.getValueAt((tmAgrupado.getRowCount() - 1), COL_ESTAD));
+                    estadisticoTotal -= Calculator.obtenerValorEnFloat(tmAgrupado.getValueAt((tmAgrupado.getRowCount() - 1), COL_ESTAD));
                     
                     double estadistico = estadisticoPrueba(frecObsActual, frecEsperadaActual);
                     tmAgrupado.setValueAt(c.format(estadistico), filaAUnir, COL_ESTAD);
@@ -522,27 +524,5 @@ public class ExponencialTestTable extends javax.swing.JFrame {
             }
         }
         return rv;
-    }
-
-    private float obtenerValorEnFloat(Object valueAt)
-    {
-        float toReturn = 0;
-        if (valueAt instanceof String)
-        {
-            String val = (String) valueAt;
-            if (val.indexOf(',') > 0)
-            {
-                toReturn = Float.parseFloat(val.replace(',', '.'));
-            }
-            else
-            {
-                toReturn = Float.parseFloat(val);
-            }
-        }
-        else if (valueAt instanceof Float)
-        {
-            toReturn = (Float) valueAt;
-        }
-        return toReturn;
     }
 }
