@@ -229,61 +229,59 @@ public class Calculator {
         return vec;
     }
     
-    public static float[][] matrizFrecuenciaPoisson(float valores[], int intervalo)
+    public static float[][] matrizFrecuenciaPoisson(float valores[])
     {
         float[] vec = valores;
-        float min = 0, max = 0;
+        int min = 0, max = 0;
 
         for (int i = 0; i < vec.length; i++)
         {
             if (vec[i] > max)
             {
-                max = vec[i];
+                max = (int) vec[i];
             }
         }
         for (int i = 0; i < vec.length; i++)
         {
             if (i == 0)
             {
-                min = vec[i];
+                min = (int) vec[i];
             }
             else
             {
                 if (vec[i] < min)
                 {
-                    min = vec[i];
+                    min = (int) vec[i];
                 }
             }
         }
-
-        int rango = (int) (max - min) / intervalo;
-        rango++;
-        float[][] m = new float[intervalo][3];
-        //  [0] es el limite inferior del intervalo
-        //  [1] es el limite superior del intervalo
-        //  [2] es la frecuencia del intervalo
-        for (int i = 0; i < intervalo; i++)
+        int r = max - min;
+        float[][] m = new float[r+1][2];
+        //  [0] es el valor x
+        //  [1] es la frecuencia del valor x
+        
+        //creacion de la matriz
+        for (int i = 0; i < r+1; i++)
         {
             if (i == 0)
             {
                 m[0][0] = min;
-                m[0][1] = min + rango - 1;
             }
             else
             {
-                float aux = m[i - 1][1];
-                m[i][0] = aux + 1;
-                m[i][1] = aux + rango;
+                m[i][0] = m[i-1][0] + 1;
             }
         }
-
+        
+        //agregado de las frecuencias
+        
         for (int i = 0; i < vec.length; i++)
         {
-            for (int j = 0; j < intervalo; j++)
+            for (int j = 0; j < r+1; j++)
             {
-                if (vec[i] <= m[j][1])
+                if (vec[i] == m[j][0])
                 {
-                    m[j][2]++;
+                    m[j][1]++;
                     break;
                 }
             }

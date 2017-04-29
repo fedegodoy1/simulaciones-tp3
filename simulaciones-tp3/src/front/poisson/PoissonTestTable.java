@@ -5,6 +5,7 @@
  */
 package front.poisson;
 
+import java.math.BigInteger;
 import java.text.*;
 import javax.swing.*;
 import javax.swing.table.*;
@@ -38,7 +39,7 @@ public class PoissonTestTable extends javax.swing.JFrame {
         N = Integer.parseInt(datos[0]);
         media = Calculator.obtenerValorEnFloat(datos[1]);
         
-        float [][] m = Calculator.matrizFrecuenciaPoisson(values, intervalos);
+        float [][] m = Calculator.matrizFrecuenciaPoisson(values);
         initComponents();
         
         
@@ -47,48 +48,29 @@ public class PoissonTestTable extends javax.swing.JFrame {
         DecimalFormat c = new DecimalFormat("0.000");
         
         DefaultTableModel tm = (DefaultTableModel) _tabla.getModel();
+        float generados = Float.parseFloat(datos[0]),frecEsp = 0, estadistico = 0;
         
-        float prob = 0;
-        float max = 0;
-        if(m[0][1]-m[0][0]<getRango(values,intervalos)){
-            for (int i = 0; i < m.length; i++) {
-                max = m[i][1];
-                prob = 0;
-                for (int j = 0; j < getRango(values,intervalos); j++) 
-                {
-                    prob += ((float)Math.pow(media,max) * (float) Math.exp(media*-1))/factorial(max);
-                    max --;
-                }
-                tm.addRow(new Object[]
+        double lambdaValor = 0,eValor = 0, prob = 0;
+        BigInteger fac;
+        
+        for (int i = 0; i < m.length; i++) {
+            lambdaValor = Math.pow(media,m[i][0]);
+            eValor = Math.exp(media*-1);
+            fac = fact((int)m[i][0]);
+            
+            prob = (lambdaValor * eValor)/fac.doubleValue();
+            frecEsp = generados * (float) prob;
+            estadistico = (float) (Math.pow(m[i][1] - frecEsp, 2))/frecEsp;
+            
+            tm.addRow(new Object[]
                 {
                     in.format(m[i][0]),
                     in.format(m[i][1]),
-                    m[i][2], 
                     c.format(prob),
-  //                c.format(frecEsp),
-  //                c.format(estadistico)
+                    c.format(frecEsp),
+                    c.format(estadistico)
                 });
-            }
         }
-        else{
-            if(m[0][1]-m[0][0] == getRango(values,intervalos)){
-                for (int i = 0; i < m.length; i++) {
-                    prob += ((float)Math.pow(Float.parseFloat(datos[1]),m[i][1])    *   (float) Math.exp(Float.parseFloat(datos[1])*-1))/factorial(m[i][1]);
-                    prob += ((float)Math.pow(Float.parseFloat(datos[1]),m[i][0])    *   (float) Math.exp(Float.parseFloat(datos[1])*-1))/factorial(m[i][0]);
-                    tm.addRow(new Object[]
-                    {
-                        in.format(m[i][0]),
-                        in.format(m[i][1]),
-                        m[i][2], 
-                        c.format(prob),
-      //                c.format(frecEsp),
-      //                c.format(estadistico)
-                    });
-                }
-            }
-        }
-        
-        
         
         
 //        for (int i = 0; i < m.length; i++) {
@@ -157,9 +139,17 @@ public class PoissonTestTable extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Desde", "Hasta", "Frec Observada", "Probabilidad", "Frec Esperada", "Estadistico"
+                "Valor", "Frec Observada", "Probabilidad", "Frec Esperada", "Estadistico"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, true, true
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         _scpTabla.setViewportView(_tabla);
 
         txt_valoresGenerados.setEditable(false);
@@ -301,11 +291,27 @@ public class PoissonTestTable extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    public int factorial (double numero) {
+    public static BigInteger fact(int a)
+    {
+        BigInteger factorial = BigInteger.ONE;
+        BigInteger factz = BigInteger.valueOf(a);
+
+        if(a == 1)
+        {
+            return factorial;
+        }
+
+        else
+        {
+            return factz.multiply(fact(a-1));
+        }
+    }
+    
+    public long factorial (double numero) {
         if (numero==0)
             return 1;
         else
-            return (int) numero * factorial(numero-1);
+            return (long) numero * factorial(numero-1);
     }
     
     public int getRango(float[]values, int intervalo){
