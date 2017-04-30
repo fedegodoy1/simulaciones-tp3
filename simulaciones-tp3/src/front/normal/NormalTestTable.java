@@ -399,7 +399,7 @@ public class NormalTestTable extends javax.swing.JFrame {
         double denominador = desviacion * Math.sqrt(2*Math.PI);
 //        float expInferior = (float) (1 - (Math.exp((-lambda * limiteInferior))));
 //        float expSuperior = (float) (1 - (Math.exp((-lambda * limiteSuperior))));
-        return (float) (Math.exp(exponente) / denominador);
+        return (float) ((Math.exp(exponente) / denominador)) * (limiteSuperior - limiteInferior);
     }
 
     private float calcularFrecuenciaEsperada(float probabilidad)
