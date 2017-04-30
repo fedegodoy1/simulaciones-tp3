@@ -61,7 +61,7 @@ public class UniformeTestTable extends javax.swing.JFrame {
                 frecObsAcumulada += matriz[i][i][2];
                 if (frecEspAcumulada >= 5) {
                     estadisticoTotal += estadisticoPrueba(frecObsAcumulada, (int) frecEspAcumulada);
-                    tm2.addRow(new Object[]{matriz[inicio][inicio][0] + " - " + matriz[i][i][1], (int) frecObsAcumulada, frecEspAcumulada, c.format(estadisticoTotal)});
+                    tm2.addRow(new Object[]{in.format(matriz[inicio][inicio][0]) + " - " + in.format(matriz[i][i][1]), (int) frecObsAcumulada, frecEspAcumulada, c.format(estadisticoTotal)});
                     inicio = i + 1;
                     frecEspAcumulada = 0;
                     frecObsAcumulada = 0;
@@ -70,7 +70,7 @@ public class UniformeTestTable extends javax.swing.JFrame {
                     if (i == tm.getRowCount() - 1) {
                         int filaAUnir = tm2.getRowCount() - 1;
                         //actualizo intervalo
-                        tm2.setValueAt(matriz[inicio][inicio][0] + " - " + matriz[i][i][1], filaAUnir, 0);
+                        tm2.setValueAt(in.format(matriz[inicio][inicio][0]) + " - " + in.format(matriz[i][i][1]), filaAUnir, 0);
                         //frec observada
                         tm2.setValueAt(frecObsAcumulada + (int) tm2.getValueAt(filaAUnir, 1), filaAUnir, 1);
                         //frec esperada
