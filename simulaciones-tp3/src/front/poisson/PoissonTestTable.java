@@ -549,7 +549,7 @@ public class PoissonTestTable extends javax.swing.JFrame {
 
     private void _btnGraficoActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event__btnGraficoActionPerformed
     {//GEN-HEADEREND:event__btnGraficoActionPerformed
-        new GraficoDeBarras("Distribucion Poisson", "Frecuencia", matrizDatos);
+        new GraficoDeBarras("Histograma Distribucion Poisson", "Frecuencia de numeros aleatorios", matrizDatos);
     }//GEN-LAST:event__btnGraficoActionPerformed
 
     public static BigInteger fact(int a)

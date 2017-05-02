@@ -10,8 +10,9 @@ import org.jfree.chart.plot.*;
 import org.jfree.chart.renderer.xy.*;
 import org.jfree.data.statistics.*;
 import org.jfree.data.xy.*;
+import org.jfree.ui.*;
 
-public class Histograma 
+public class Histograma extends JFrame
 {
 
     double[] valores;
@@ -24,17 +25,23 @@ public class Histograma
     
     public Histograma(String titleGrafico, String labelFrecuencia, double[] valores, int cantIntervalos)
     {
+        super(titleGrafico);
         this.valores = valores;
         this.cantIntervalos = cantIntervalos;
         this.tituloGrafico = titleGrafico;
         this.labelFrecuencia = labelFrecuencia;
         chartPanel = crearPanel();
         chartPanel.setPreferredSize(new java.awt.Dimension(500, 475));
+        setContentPane(chartPanel);
+        pack();
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        RefineryUtilities.centerFrameOnScreen(this);
+        setVisible(true);
     }
 
     public Histograma(String titleGrafico, String labelFrecuencia, double[] valores, int cantIntervalos, double valorMinimo, double valorMaximo)
     {
-        
+        super(titleGrafico);
         this.valorMinimo = valorMinimo;
         this.valorMaximo = valorMaximo;
         this.valores = valores;
@@ -43,6 +50,11 @@ public class Histograma
         this.labelFrecuencia = labelFrecuencia;
         chartPanel = crearPanel();
         chartPanel.setPreferredSize(new java.awt.Dimension(500, 475));
+        setContentPane(chartPanel);
+        pack();
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        RefineryUtilities.centerFrameOnScreen(this);
+        setVisible(true);
     }
     
     private  IntervalXYDataset crearDataset()

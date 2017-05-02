@@ -21,6 +21,7 @@ public class ExponencialTestTable extends javax.swing.JFrame {
     float rango;
     float minimo, maximo;
     int N;
+    float[] values;
     
     private final static int COL_DESDE = 0;
     private final static int COL_HASTA = 1;
@@ -35,9 +36,10 @@ public class ExponencialTestTable extends javax.swing.JFrame {
     
     private int cantIntervalos;
 
-    public ExponencialTestTable(JFrame parent, Controller cont, float[] values, String[] datos, int intervalos) 
+    public ExponencialTestTable(JFrame parent, Controller cont, float[] valores, String[] datos, int intervalos) 
     {
         cantIntervalos = intervalos;
+        values = valores;
         float[] ordenadosValues = new float[values.length];
         System.arraycopy(values, 0, ordenadosValues, 0, values.length);
         rango = calcularRango(ordenadosValues, cantIntervalos);
@@ -79,7 +81,7 @@ public class ExponencialTestTable extends javax.swing.JFrame {
         txt_grados.setText("" + gradosLibertad(cantIntervalos));
 
         //     valoresGenerados = vec;
-        agregarHistograma(values);
+//        agregarHistograma(values);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         this.setVisible(true);
     }
@@ -131,7 +133,6 @@ public class ExponencialTestTable extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         txt_grados = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
-        panelHistograma = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         txt_nuevo_estadistico = new javax.swing.JTextField();
@@ -141,6 +142,7 @@ public class ExponencialTestTable extends javax.swing.JFrame {
         _tabla = new javax.swing.JTable();
         jScrollPane1 = new javax.swing.JScrollPane();
         _tablaAcumulada = new javax.swing.JTable();
+        _btnGrafico = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Prueba de chi cuadrado");
@@ -184,9 +186,6 @@ public class ExponencialTestTable extends javax.swing.JFrame {
             }
         });
 
-        panelHistograma.setPreferredSize(new java.awt.Dimension(800, 800));
-        panelHistograma.setLayout(new java.awt.BorderLayout());
-
         jLabel4.setText("Si la frecuencia esperada es menor a 5");
 
         jLabel5.setText("Estadistico de prueba total:");
@@ -224,6 +223,15 @@ public class ExponencialTestTable extends javax.swing.JFrame {
             }
         ));
         jScrollPane1.setViewportView(_tablaAcumulada);
+
+        _btnGrafico.setText("Ver Grafico");
+        _btnGrafico.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                _btnGraficoActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -266,11 +274,10 @@ public class ExponencialTestTable extends javax.swing.JFrame {
                                 .addGap(14, 14, 14)
                                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 518, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(438, 438, 438)
-                        .addComponent(jButton1))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(61, 61, 61)
-                        .addComponent(panelHistograma, javax.swing.GroupLayout.PREFERRED_SIZE, 1053, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(385, 385, 385)
+                        .addComponent(jButton1)
+                        .addGap(146, 146, 146)
+                        .addComponent(_btnGrafico)))
                 .addContainerGap(12, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -299,10 +306,10 @@ public class ExponencialTestTable extends javax.swing.JFrame {
                     .addComponent(txt_nuevo_estadistico, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel6)
                     .addComponent(_gradosLib_agrupado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(panelHistograma, javax.swing.GroupLayout.DEFAULT_SIZE, 229, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
-                .addComponent(jButton1)
+                .addGap(27, 27, 27)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1)
+                    .addComponent(_btnGrafico))
                 .addContainerGap())
         );
 
@@ -328,11 +335,17 @@ public class ExponencialTestTable extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txt_nuevo_estadisticoActionPerformed
 
+    private void _btnGraficoActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event__btnGraficoActionPerformed
+    {//GEN-HEADEREND:event__btnGraficoActionPerformed
+        agregarHistograma(values);
+    }//GEN-LAST:event__btnGraficoActionPerformed
+
     /**
      * @param args the command line arguments
      */
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton _btnGrafico;
     private javax.swing.JTextField _gradosLib_agrupado;
     private javax.swing.JScrollPane _scpTabla;
     private javax.swing.JTable _tabla;
@@ -346,7 +359,6 @@ public class ExponencialTestTable extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JPanel panelHistograma;
     private javax.swing.JTextField txt_estadistico;
     private javax.swing.JTextField txt_grados;
     private javax.swing.JTextField txt_nuevo_estadistico;
@@ -359,10 +371,10 @@ public class ExponencialTestTable extends javax.swing.JFrame {
         Histograma histograma = new Histograma("Histograma Distribucion Exponencial",
                 "Frecuencia de numeros aleatorios", valoresGeneradosEnDouble,
                 cantIntervalos, (double) minimo, (double) maximo);
-        JPanel histoPanel = histograma.obtenerPanel();
-        histoPanel.setVisible(true);
-        panelHistograma.add(histoPanel);
-        panelHistograma.validate();
+//        JPanel histoPanel = histograma.obtenerPanel();
+//        histoPanel.setVisible(true);
+//        panelHistograma.add(histoPanel);
+//        panelHistograma.validate();
     }
 
     private double[] obtenerValoresEnDouble(float[] valoresGenerados) {

@@ -22,9 +22,13 @@ public class UniformeTestTable extends javax.swing.JFrame {
     Controller controller;
     int contador;
     Calculator calculator = new Calculator();
+    Uniforme valores;
+    int intervalos;
 
     //public UniformeTestTable(Controller cont, int[][] response, float[]vec, float rango, int cantIntervalos) {
-    public UniformeTestTable(Controller cont, Uniforme uniformeValues, int intervalos) {
+    public UniformeTestTable(Controller cont, Uniforme uniformeValues, int cantIntervalos) {
+        valores = uniformeValues;
+        intervalos = cantIntervalos;
         float rango = calcularRango(uniformeValues.getDesde(), uniformeValues.getHasta(), intervalos);
         controller = cont;
         float[][][] matriz = calculator.matrizFrecuenciaUniforme(uniformeValues, rango, intervalos);
@@ -89,7 +93,7 @@ public class UniformeTestTable extends javax.swing.JFrame {
             txt_nuevo_estadistico.setText("" + c.format(estadisticoTotal));
         }
 
-        agregarHistograma(intervalos, uniformeValues);
+//        agregarHistograma(intervalos, uniformeValues);
         this.setVisible(true);
     }
 
@@ -123,7 +127,8 @@ public class UniformeTestTable extends javax.swing.JFrame {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents()
+    {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         table = new javax.swing.JTable();
@@ -135,7 +140,6 @@ public class UniformeTestTable extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         txt_grados = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
-        panelHistograma = new javax.swing.JPanel();
         scfe = new javax.swing.JScrollPane();
         tablaFE = new javax.swing.JTable();
         jLabel4 = new javax.swing.JLabel();
@@ -143,28 +147,36 @@ public class UniformeTestTable extends javax.swing.JFrame {
         txt_nuevo_estadistico = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         _gradosLib_agrupado = new javax.swing.JTextField();
+        _btnGrafico = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Prueba de chi cuadrado");
-        addWindowListener(new java.awt.event.WindowAdapter() {
-            public void windowActivated(java.awt.event.WindowEvent evt) {
+        addWindowListener(new java.awt.event.WindowAdapter()
+        {
+            public void windowActivated(java.awt.event.WindowEvent evt)
+            {
                 formWindowActivated(evt);
             }
         });
 
         table.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
+            new Object [][]
+            {
 
             },
-            new String [] {
+            new String []
+            {
                 "Numeros del intervalo", "Intervalo", "Frecuencia", "Frecuencia esperada", "Estadistico de prueba"
             }
-        ) {
-            boolean[] canEdit = new boolean [] {
+        )
+        {
+            boolean[] canEdit = new boolean []
+            {
                 false, false, false, false, false
             };
 
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
+            public boolean isCellEditable(int rowIndex, int columnIndex)
+            {
                 return canEdit [columnIndex];
             }
         });
@@ -178,8 +190,10 @@ public class UniformeTestTable extends javax.swing.JFrame {
         jLabel1.setText("Valores Generados");
 
         txt_estadistico.setEditable(false);
-        txt_estadistico.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        txt_estadistico.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 txt_estadisticoActionPerformed(evt);
             }
         });
@@ -192,28 +206,32 @@ public class UniformeTestTable extends javax.swing.JFrame {
 
         jButton1.setText("Volver");
         jButton1.setToolTipText("");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jButton1.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 jButton1ActionPerformed(evt);
             }
         });
 
-        panelHistograma.setPreferredSize(new java.awt.Dimension(800, 800));
-        panelHistograma.setLayout(new java.awt.BorderLayout());
-
         tablaFE.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
+            new Object [][]
+            {
 
             },
-            new String [] {
+            new String []
+            {
                 "Intervalo", "Frecuencia observada", "Frecuencia esperada", "Estadistico de prueba"
             }
-        ) {
-            boolean[] canEdit = new boolean [] {
+        )
+        {
+            boolean[] canEdit = new boolean []
+            {
                 false, false, false, false
             };
 
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
+            public boolean isCellEditable(int rowIndex, int columnIndex)
+            {
                 return canEdit [columnIndex];
             }
         });
@@ -223,59 +241,68 @@ public class UniformeTestTable extends javax.swing.JFrame {
 
         jLabel5.setText("Estadistico de prueba total:");
 
-        txt_nuevo_estadistico.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        txt_nuevo_estadistico.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 txt_nuevo_estadisticoActionPerformed(evt);
             }
         });
 
         jLabel6.setText("Grados de Libertad:");
 
+        _btnGrafico.setText("Ver Grafico");
+        _btnGrafico.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                _btnGraficoActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 600, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 600, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel1)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel2)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txt_estadistico, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(40, 40, 40)
-                                .addComponent(jLabel3)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txt_grados, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel1)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txt_estadistico, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(40, 40, 40)
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txt_grados, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(scfe)
+                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(scfe)
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel5)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(txt_nuevo_estadistico, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(116, 116, 116)
-                                        .addComponent(jLabel6)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(_gradosLib_agrupado, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(jLabel4))
-                                .addGap(0, 0, Short.MAX_VALUE))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(438, 438, 438)
-                        .addComponent(jButton1))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(61, 61, 61)
-                        .addComponent(panelHistograma, javax.swing.GroupLayout.PREFERRED_SIZE, 1053, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(jLabel5)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txt_nuevo_estadistico, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(116, 116, 116)
+                                .addComponent(jLabel6)
+                                .addGap(18, 18, 18)
+                                .addComponent(_gradosLib_agrupado, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel4))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addGap(416, 416, 416)
+                .addComponent(jButton1)
+                .addGap(231, 231, 231)
+                .addComponent(_btnGrafico)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -287,7 +314,7 @@ public class UniformeTestTable extends javax.swing.JFrame {
                 .addGap(2, 2, 2)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(scfe, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 302, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 383, Short.MAX_VALUE)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -299,10 +326,10 @@ public class UniformeTestTable extends javax.swing.JFrame {
                     .addComponent(txt_nuevo_estadistico, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel6)
                     .addComponent(_gradosLib_agrupado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(panelHistograma, javax.swing.GroupLayout.DEFAULT_SIZE, 411, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
-                .addComponent(jButton1)
+                .addGap(32, 32, 32)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1)
+                    .addComponent(_btnGrafico))
                 .addContainerGap())
         );
 
@@ -328,11 +355,17 @@ public class UniformeTestTable extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txt_nuevo_estadisticoActionPerformed
 
+    private void _btnGraficoActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event__btnGraficoActionPerformed
+    {//GEN-HEADEREND:event__btnGraficoActionPerformed
+        agregarHistograma(intervalos, valores);
+    }//GEN-LAST:event__btnGraficoActionPerformed
+
     /**
      * @param args the command line arguments
      */
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton _btnGrafico;
     private javax.swing.JTextField _gradosLib_agrupado;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
@@ -343,7 +376,6 @@ public class UniformeTestTable extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JPanel panelHistograma;
     private javax.swing.JScrollPane scfe;
     private javax.swing.JTable tablaFE;
     private javax.swing.JTable table;
@@ -355,12 +387,12 @@ public class UniformeTestTable extends javax.swing.JFrame {
 
     private void agregarHistograma(int cantIntervalos, Uniforme uniformeValues) {
         // Tenemos que convertir los numeros generados a un vector de double.
-        Histograma histograma = new Histograma("Frecuencia de numeros random Java",
-        "Histograma del Random de Java", obtenerValoresEnDouble(uniformeValues), cantIntervalos, uniformeValues.getDesde(), uniformeValues.getHasta());
-        JPanel histoPanel = histograma.obtenerPanel();
-        histoPanel.setVisible(true);
-        panelHistograma.add(histoPanel);
-        panelHistograma.validate();
+        Histograma histograma = new Histograma("Histograma Distribucion Uniforme",
+        "Frecuencia de numeros aleatorios", obtenerValoresEnDouble(uniformeValues), cantIntervalos, uniformeValues.getDesde(), uniformeValues.getHasta());
+//        JPanel histoPanel = histograma.obtenerPanel();
+//        histoPanel.setVisible(true);
+//        panelHistograma.add(histoPanel);
+//        panelHistograma.validate();
     }
 
     private double[] obtenerValoresEnDouble(Uniforme uniformeValues) {
