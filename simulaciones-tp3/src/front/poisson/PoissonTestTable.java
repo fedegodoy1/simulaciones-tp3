@@ -45,12 +45,13 @@ public class PoissonTestTable extends javax.swing.JFrame {
         
         
         DecimalFormat in = new DecimalFormat("0.00");
+        DecimalFormat entero = new DecimalFormat("0");
         DecimalFormat c = new DecimalFormat("0.000");
         
         DefaultTableModel tm = (DefaultTableModel) _tabla.getModel();
         float generados = Float.parseFloat(datos[0]),frecEsp = 0, estadistico = 0;
         
-        double lambdaValor = 0,eValor = 0, prob = 0;
+        double lambdaValor = 0,eValor = 0, prob = 0, estadisticoT = 0;
         BigInteger fac;
         
         for (int i = 0; i < m.length; i++) {
@@ -61,16 +62,212 @@ public class PoissonTestTable extends javax.swing.JFrame {
             prob = (lambdaValor * eValor)/fac.doubleValue();
             frecEsp = generados * (float) prob;
             estadistico = (float) (Math.pow(m[i][1] - frecEsp, 2))/frecEsp;
-            
+            estadisticoT += estadistico;
             tm.addRow(new Object[]
                 {
                     in.format(m[i][0]),
                     in.format(m[i][1]),
                     c.format(prob),
-                    c.format(frecEsp),
+                    entero.format(frecEsp),
                     c.format(estadistico)
                 });
         }
+        int gr = tm.getRowCount()-1;
+        txt_grados.setText(""+gr);
+        txt_estadistico.setText(""+c.format(estadisticoT));
+        
+        int aux = 0;
+        for (int i = 0; i < tm.getRowCount(); i++) {
+            if(Float.parseFloat((String)tm.getValueAt(i, 3)) < 5){
+                aux++;
+            }
+        }
+        
+        DefaultTableModel tm2 = (DefaultTableModel) _tablaAcumulada.getModel();
+        float frecSumaEsp = 0, probSuma=0, estadisticoTotal = 0, frecSumaObservadas = 0, frecEsperadaActual = 0, frecObservadaActual = 0, probActual = 0; 
+        int vueltas = 1; float hasta = 0, hastaActual = 0;
+        float dd = 0;
+        //si al menos existe un valor menor que 5
+        if(aux > 0){
+            //recorro las filas de la tabla _tabla
+            for (int i = 0; i < tm.getRowCount(); i++) {
+                if(Float.parseFloat((String)tm.getValueAt(i, 3)) < 5){
+                    //recorro las filas a acumular
+                    for (int j = i; j <= tm.getRowCount(); j++) {
+                        if(frecSumaEsp < 5){
+                            if(j==tm.getRowCount())//significa que termino de buscar en las filas y aun la fe es menor a 5
+                            {
+                                float valorO=0,valorE=0, valorP = 0,voo=0, vpp = 0, vee=0;
+                                float valorH = 0; 
+                                if (tm2.getValueAt((tm2.getRowCount()-1), 2) instanceof String)
+                                {
+                                    String vo = (String)tm2.getValueAt((tm2.getRowCount()-1), 2);
+                                    if (vo.indexOf(',') > 0)
+                                    {
+                                        voo = Float.parseFloat(vo.replace(',', '.'));
+                                    }
+                                    else
+                                    {
+                                        voo = Float.parseFloat(vo);
+                                    }
+                                    valorO = voo;
+                                }
+                                else{
+                                    valorO =   (float) tm2.getValueAt((tm2.getRowCount()-1), 2);
+                                }
+                                
+                                
+                                if (tm2.getValueAt(tm2.getRowCount()-1, 3) instanceof String)
+                                {
+                                    String vp = (String) tm2.getValueAt(tm2.getRowCount()-1, 3);
+                                    if (vp.indexOf(',') > 0)
+                                    {
+                                        vpp = Float.parseFloat(vp.replace(',', '.'));
+                                    }
+                                    else
+                                    {
+                                        vpp = Float.parseFloat(vp);
+                                    }
+                                    valorP =    vpp;
+                                }
+                                else{
+                                    valorP =    (float)tm2.getValueAt(tm2.getRowCount()-1, 3);
+                                }
+                                        
+                                
+                                if (tm2.getValueAt((tm2.getRowCount()-1), 4) instanceof String)
+                                {
+                                    String ve = (String) tm2.getValueAt((tm2.getRowCount()-1), 4);
+                                    if (ve.indexOf(',') > 0)
+                                    {
+                                        vee = Float.parseFloat(ve.replace(',', '.'));
+                                    }
+                                    else
+                                    {
+                                        vee = Float.parseFloat(ve);
+                                    }
+                                    valorE =   vee;
+                                }
+                                else{
+                                    valorE =   (float)tm2.getValueAt((tm2.getRowCount()-1), 4);
+                                }
+                                
+                                
+                                valorH = hasta;
+                                valorP += probSuma;
+                                valorE += frecSumaEsp;
+                                valorO += frecSumaObservadas;
+                                
+                                tm2.setValueAt(valorH, (tm2.getRowCount()-1), 1);
+                                tm2.setValueAt(valorO, (tm2.getRowCount()-1), 2);
+                                tm2.setValueAt(valorP, (tm2.getRowCount()-1), 3);
+                                tm2.setValueAt(valorE, (tm2.getRowCount()-1), 4);
+
+                                double estadis= (double) Math.pow((valorE - valorO),2)/valorE;
+                                tm2.setValueAt(estadis, (tm2.getRowCount()-1), 5);
+                                i = tm.getRowCount();
+
+                                break;
+                            }
+                            if (tm.getValueAt(j, 3) instanceof String)
+                            {
+                                String frecEsperada = (String) tm.getValueAt(j, 3);
+                                if (frecEsperada.indexOf(',') > 0)
+                                {
+                                    frecEsperadaActual = Float.parseFloat(frecEsperada.replace(',', '.'));
+                                }
+                                else
+                                {
+                                    frecEsperadaActual = Float.parseFloat(frecEsperada);
+                                }
+                            }
+                            
+                            frecSumaEsp += frecEsperadaActual;
+                            
+                            if (tm.getValueAt(j, 1) instanceof String)
+                            {
+                                String fo = (String) tm.getValueAt(j, 1);
+                                if (fo.indexOf(',') > 0)
+                                {
+                                    frecObservadaActual = Float.parseFloat(fo.replace(',', '.'));
+                                }
+                                else
+                                {
+                                    frecObservadaActual = Float.parseFloat(fo);
+                                }
+                            }
+                            frecSumaObservadas += frecObservadaActual;
+                            
+                            if (tm.getValueAt(j, 2) instanceof String)
+                            {
+                                String p = (String) tm.getValueAt(j, 2);
+                                if (p.indexOf(',') > 0)
+                                {
+                                    probActual = Float.parseFloat(p.replace(',', '.'));
+                                }
+                                else
+                                {
+                                    probActual = Float.parseFloat(p);
+                                }
+                            }
+                            probSuma += probActual;
+                            
+                            if (tm.getValueAt(j, 0) instanceof String)
+                            {
+                                String h = (String) tm.getValueAt(j, 0);
+                                if (h.indexOf(',') > 0)
+                                {
+                                    hastaActual = Float.parseFloat(h.replace(',', '.'));
+                                }
+                                else
+                                {
+                                    hastaActual = Float.parseFloat(h);
+                                }
+                            }
+                            hasta = hastaActual;
+                            vueltas++;
+                        }
+                        else{
+                            double estadisticoParcial=(double)(Math.pow((frecSumaObservadas-frecSumaEsp),2))/frecSumaEsp;
+                            if(tm2.getRowCount()==0){
+                                tm2.addRow(new Object[]{hasta-(j-1), hasta, frecSumaObservadas, probSuma, frecSumaEsp, c.format(estadisticoParcial)});
+                            }
+                            else{
+                                if (tm2.getValueAt(tm2.getRowCount()-1, 1) instanceof String)
+                                {
+                                    String d = (String) tm2.getValueAt(tm2.getRowCount()-1, 1);
+                                    if (d.indexOf(',') > 0)
+                                    {
+                                        dd = Float.parseFloat(d.replace(',', '.'));
+                                    }
+                                    else
+                                    {
+                                        dd = Float.parseFloat(d);
+                                    }
+                                    tm2.addRow(new Object[]{dd+1, hasta, frecSumaObservadas, probSuma, frecSumaEsp, c.format(estadisticoParcial)});
+                                }
+                                else{
+                                    tm2.addRow(new Object[]{(float)tm2.getValueAt(tm2.getRowCount()-1, 1)+1, hasta, frecSumaObservadas, probSuma, frecSumaEsp, c.format(estadisticoParcial)});
+                                }
+                                
+                            }
+                            
+                            frecSumaEsp = 0;
+                            frecSumaObservadas = 0;
+                            probSuma = 0;
+                            i = j-1;
+                            break;
+                        }
+                    }
+                }
+                else{
+                    tm2.addRow(new Object[]{tm.getValueAt(i, 0), tm.getValueAt(i, 0), tm.getValueAt(i, 1), tm.getValueAt(i, 2), tm.getValueAt(i, 3), tm.getValueAt(i, 4)});
+                }
+            }
+        }
+        
+        
+        
         
         
 //        for (int i = 0; i < m.length; i++) {
@@ -87,9 +284,32 @@ public class PoissonTestTable extends javax.swing.JFrame {
 //        completarFrecuencia();
 //        
 //        agregarAgrupado();
-        
+        int grados = tm2.getRowCount()-1;
+        double estTot=0 , et=0;
+        for (int i = 0; i < tm2.getRowCount(); i++) {
+            
+            if (tm2.getValueAt(i, 5) instanceof String)
+            {
+                String e = (String) tm2.getValueAt(i, 5);
+                if (e.indexOf(',') > 0)
+                {
+                    et = Double.parseDouble(e.replace(',', '.'));
+                }
+                else
+                {
+                    et = Double.parseDouble(e);
+                }
+                estTot = et;
+            }
+            else{
+                estTot += (double)tm2.getValueAt(i, 5);
+            }
+            
+        }
         String valoresGenerados = valoresGenerados(values);
         txt_valoresGenerados.setText(valoresGenerados);
+        txt_nuevo_estadistico.setText(""+c.format(estTot));
+        _gradosLib_agrupado.setText(""+grados);
     }
 
     /**
@@ -126,6 +346,7 @@ public class PoissonTestTable extends javax.swing.JFrame {
 
         jLabel5.setText("Estadistico de prueba total:");
 
+        txt_nuevo_estadistico.setEditable(false);
         txt_nuevo_estadistico.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txt_nuevo_estadisticoActionPerformed(evt);
@@ -133,6 +354,8 @@ public class PoissonTestTable extends javax.swing.JFrame {
         });
 
         jLabel6.setText("Grados de Libertad:");
+
+        _gradosLib_agrupado.setEditable(false);
 
         _tabla.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -164,7 +387,15 @@ public class PoissonTestTable extends javax.swing.JFrame {
             new String [] {
                 "Desde", "Hasta", "Frec Obs", "Prob", "Frec Esp", "Estadistico"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane1.setViewportView(_tablaAcumulada);
 
         jLabel1.setText("Valores Generados");
@@ -293,18 +524,25 @@ public class PoissonTestTable extends javax.swing.JFrame {
 
     public static BigInteger fact(int a)
     {
-        BigInteger factorial = BigInteger.ONE;
-        BigInteger factz = BigInteger.valueOf(a);
+        BigInteger factorial = BigInteger.ONE; 
+        for (int i = a; i > 0; i--) {
+            factorial = factorial.multiply(BigInteger.valueOf(i)); 
+        } 
+        return factorial;
 
-        if(a == 1)
-        {
-            return factorial;
-        }
 
-        else
-        {
-            return factz.multiply(fact(a-1));
-        }
+//        BigInteger factorial = BigInteger.ONE;
+//        BigInteger factz = BigInteger.valueOf(a);
+//
+//        if(a == 1)
+//        {
+//            return factorial;
+//        }
+//
+//        else
+//        {
+//            return factz.multiply(fact(a-1));
+//        }
     }
     
     public long factorial (double numero) {
