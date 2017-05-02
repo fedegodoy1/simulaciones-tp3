@@ -9,6 +9,7 @@ import java.math.BigInteger;
 import java.text.*;
 import javax.swing.*;
 import javax.swing.table.*;
+import jfree.*;
 import objects.*;
 
 /**
@@ -21,6 +22,7 @@ public class PoissonTestTable extends javax.swing.JFrame {
     float[] valores;
     int N;
     float media;
+    float[][] matrizDatos;
 
     private final static int COL_DESDE = 0;
     private final static int COL_HASTA = 1;
@@ -39,7 +41,7 @@ public class PoissonTestTable extends javax.swing.JFrame {
         N = Integer.parseInt(datos[0]);
         media = Calculator.obtenerValorEnFloat(datos[1]);
         
-        float [][] m = Calculator.matrizFrecuenciaPoisson(values);
+        matrizDatos = Calculator.matrizFrecuenciaPoisson(values);
         initComponents();
         
         
@@ -54,19 +56,19 @@ public class PoissonTestTable extends javax.swing.JFrame {
         double lambdaValor = 0,eValor = 0, prob = 0, estadisticoT = 0;
         BigInteger fac;
         
-        for (int i = 0; i < m.length; i++) {
-            lambdaValor = Math.pow(media,m[i][0]);
+        for (int i = 0; i < matrizDatos.length; i++) {
+            lambdaValor = Math.pow(media,matrizDatos[i][0]);
             eValor = Math.exp(media*-1);
-            fac = fact((int)m[i][0]);
+            fac = fact((int)matrizDatos[i][0]);
             
             prob = (lambdaValor * eValor)/fac.doubleValue();
             frecEsp = generados * (float) prob;
-            estadistico = (float) (Math.pow(m[i][1] - frecEsp, 2))/frecEsp;
+            estadistico = (float) (Math.pow(matrizDatos[i][1] - frecEsp, 2))/frecEsp;
             estadisticoT += estadistico;
             tm.addRow(new Object[]
                 {
-                    in.format(m[i][0]),
-                    in.format(m[i][1]),
+                    in.format(matrizDatos[i][0]),
+                    in.format(matrizDatos[i][1]),
                     c.format(prob),
                     entero.format(frecEsp),
                     c.format(estadistico)
@@ -319,7 +321,8 @@ public class PoissonTestTable extends javax.swing.JFrame {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents()
+    {
 
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
@@ -338,7 +341,7 @@ public class PoissonTestTable extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         txt_grados = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
-        panelHistograma = new javax.swing.JPanel();
+        _btnGrafico = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -347,8 +350,10 @@ public class PoissonTestTable extends javax.swing.JFrame {
         jLabel5.setText("Estadistico de prueba total:");
 
         txt_nuevo_estadistico.setEditable(false);
-        txt_nuevo_estadistico.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        txt_nuevo_estadistico.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 txt_nuevo_estadisticoActionPerformed(evt);
             }
         });
@@ -358,18 +363,23 @@ public class PoissonTestTable extends javax.swing.JFrame {
         _gradosLib_agrupado.setEditable(false);
 
         _tabla.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
+            new Object [][]
+            {
 
             },
-            new String [] {
+            new String []
+            {
                 "Valor", "Frec Observada", "Probabilidad", "Frec Esperada", "Estadistico"
             }
-        ) {
-            boolean[] canEdit = new boolean [] {
+        )
+        {
+            boolean[] canEdit = new boolean []
+            {
                 false, false, false, true, true
             };
 
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
+            public boolean isCellEditable(int rowIndex, int columnIndex)
+            {
                 return canEdit [columnIndex];
             }
         });
@@ -381,18 +391,23 @@ public class PoissonTestTable extends javax.swing.JFrame {
         jScrollPane2.setViewportView(txt_valoresGenerados);
 
         _tablaAcumulada.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
+            new Object [][]
+            {
 
             },
-            new String [] {
+            new String []
+            {
                 "Desde", "Hasta", "Frec Obs", "Prob", "Frec Esp", "Estadistico"
             }
-        ) {
-            boolean[] canEdit = new boolean [] {
+        )
+        {
+            boolean[] canEdit = new boolean []
+            {
                 false, false, false, false, false, false
             };
 
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
+            public boolean isCellEditable(int rowIndex, int columnIndex)
+            {
                 return canEdit [columnIndex];
             }
         });
@@ -401,8 +416,10 @@ public class PoissonTestTable extends javax.swing.JFrame {
         jLabel1.setText("Valores Generados");
 
         txt_estadistico.setEditable(false);
-        txt_estadistico.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        txt_estadistico.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 txt_estadisticoActionPerformed(evt);
             }
         });
@@ -415,62 +432,70 @@ public class PoissonTestTable extends javax.swing.JFrame {
 
         jButton1.setText("Volver");
         jButton1.setToolTipText("");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jButton1.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 jButton1ActionPerformed(evt);
             }
         });
 
-        panelHistograma.setPreferredSize(new java.awt.Dimension(800, 800));
-        panelHistograma.setLayout(new java.awt.BorderLayout());
+        _btnGrafico.setText("Ver Grafico");
+        _btnGrafico.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                _btnGraficoActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
+                        .addGap(8, 8, 8)
+                        .addComponent(_scpTabla, javax.swing.GroupLayout.PREFERRED_SIZE, 600, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(8, 8, 8)
-                                .addComponent(_scpTabla, javax.swing.GroupLayout.PREFERRED_SIZE, 600, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel1)))
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel1)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jButton1)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel2)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(txt_estadistico, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(40, 40, 40)
-                                .addComponent(jLabel3)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txt_grados, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(jLabel3)))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel5)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(txt_nuevo_estadistico, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(116, 116, 116)
-                                        .addComponent(jLabel6)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(_gradosLib_agrupado, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(jLabel4)))
+                                .addComponent(txt_grados, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(14, 14, 14)
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 518, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addGap(215, 215, 215)
+                                .addComponent(_btnGrafico)))))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(438, 438, 438)
-                        .addComponent(jButton1))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel5)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txt_nuevo_estadistico, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(116, 116, 116)
+                                .addComponent(jLabel6)
+                                .addGap(18, 18, 18)
+                                .addComponent(_gradosLib_agrupado, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel4)))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(61, 61, 61)
-                        .addComponent(panelHistograma, javax.swing.GroupLayout.PREFERRED_SIZE, 1053, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(14, 14, 14)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 518, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(227, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -498,10 +523,10 @@ public class PoissonTestTable extends javax.swing.JFrame {
                     .addComponent(txt_nuevo_estadistico, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel6)
                     .addComponent(_gradosLib_agrupado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(panelHistograma, javax.swing.GroupLayout.PREFERRED_SIZE, 237, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton1)
+                .addGap(29, 29, 29)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1)
+                    .addComponent(_btnGrafico))
                 .addContainerGap())
         );
 
@@ -521,6 +546,11 @@ public class PoissonTestTable extends javax.swing.JFrame {
         //  controller.volverDeTestRandomJava();
         dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void _btnGraficoActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event__btnGraficoActionPerformed
+    {//GEN-HEADEREND:event__btnGraficoActionPerformed
+        new GraficoDeBarras("Distribucion Poisson", "Frecuencia", matrizDatos);
+    }//GEN-LAST:event__btnGraficoActionPerformed
 
     public static BigInteger fact(int a)
     {
@@ -586,6 +616,7 @@ public class PoissonTestTable extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton _btnGrafico;
     private javax.swing.JTextField _gradosLib_agrupado;
     private javax.swing.JScrollPane _scpTabla;
     private javax.swing.JTable _tabla;
@@ -599,7 +630,6 @@ public class PoissonTestTable extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JPanel panelHistograma;
     private javax.swing.JTextField txt_estadistico;
     private javax.swing.JTextField txt_grados;
     private javax.swing.JTextField txt_nuevo_estadistico;
